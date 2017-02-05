@@ -1,4 +1,3 @@
-
 <?php
 
 
@@ -6,8 +5,6 @@
     require("session.php");
 
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -90,7 +87,7 @@
 				</div>
 
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-lg-7">
 						<div class="panel panel-green">
 							<div class="panel-heading">
 								<i class="fa fa-search fa-fw"></i>&nbsp; Search Syllabus
@@ -113,7 +110,7 @@
 										</div>
 									</form>
 									<div class="tab-pane fade in active" id="mycourses">
-										<table class="table table-scroll table-hover table-fixed">
+										<table class="table table-scroll table-striped">
 											<thead>
 												<tr>
 													<th>Course Code</th>
@@ -122,7 +119,7 @@
 												</tr>
 											</thead>
 
-											<tbody>
+											<tbody style="width:80%; height:50%;">
 												<tr>
 													<td id="code">COE 002A</td>
 													<td id="desc">
@@ -136,7 +133,7 @@
 										</table>
 									</div>
 									<div class="tab-pane fade" id="other">
-										<table class="table table-scroll table-hover table-fixed">
+										<table class="table table-scroll table-striped">
 											<thead>
 												<tr>
 													<th>Course Code</th>
@@ -145,7 +142,7 @@
 												</tr>
 											</thead>
 
-											<tbody>
+											<tbody style="width:80%; height:50%;">
 												<tr>
 													<td id="code">CPE 501</td>
 													<td id="desc">

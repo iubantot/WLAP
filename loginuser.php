@@ -18,7 +18,7 @@
             $res = mysqli_query($conn,$sql);
             while ($userdata = mysqli_fetch_array($res)) {
                 $total = $userdata['Total'];
-                  
+
             }
             if ($total == 1) {
                 $_SESSION['login_user']=$Vusername; // Initializing Session
