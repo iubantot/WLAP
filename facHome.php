@@ -5,6 +5,8 @@
     require("session.php");
 
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,7 +60,7 @@
 					<div class="sidebar-nav navbar-collapse text-center">
 						<ul class="nav" id="side-menu">
 							<li>
-								<a href="#"><i class="fa fa-3x fa-home fa-fw"></i><br>Home</a>
+								<a href="facHome.php"><i class="fa fa-3x fa-home fa-fw"></i><br>Home</a>
 							</li>
 							<li>
 								<a href="facWLAP.php"><i class="fa fa-3x fa-calendar-o fa-fw"></i><br>WLAP</a>
@@ -101,7 +103,7 @@
 										<input type="text" placeholder="Search for..." class="form-control">
 									</div>
 								</form>
-                <?php
+								<?php
 
                 $t=date('d-m-Y');
                 $p=date("D",strtotime($t));
@@ -110,7 +112,7 @@
                 $result1 = mysqli_query($conn,$sql);
 
                  ?>
-								<table class="table table-scroll table-hover table-fixed">
+								<table class="table table-scroll table-striped">
 									<thead>
 										<tr>
 											<th>Course Code</th>
@@ -123,16 +125,16 @@
 									</thead>
 
 									<tbody>
-                    <?php while ($schedule = mysqli_fetch_object($result1)){?>
-										<tr>
-											<td id="code"><?php echo $schedule->CourseCode;?></td>
-											<td id="desc"><?php echo $schedule->CourseName;?></td>
-											<td id="sec"><?php echo $schedule->Section;?></td>
-											<td id="day"><?php echo $schedule->ScheduleDay;?></td>
-											<td id="time"><?php echo $schedule->ScheduleTimeIN;?>-<?php echo $schedule->ScheduleTimeOUT;?></td>
-											<td id="room"><?php echo $schedule->Room;?></td>
-										</tr>
-                         <?php } ?>
+										<?php while ($schedule = mysqli_fetch_object($result1)){?>
+											<tr>
+												<td id="code"><?php echo $schedule->CourseCode;?></td>
+												<td id="desc"><?php echo $schedule->CourseName;?></td>
+												<td id="sec"><?php echo $schedule->Section;?></td>
+												<td id="day"><?php echo $schedule->ScheduleDay;?></td>
+												<td id="time"><?php echo $schedule->ScheduleTimeIN;?>-<?php echo $schedule->ScheduleTimeOUT;?></td>
+												<td id="room"><?php echo $schedule->Room;?></td>
+											</tr>
+	                         <?php } ?>
 									</tbody>
 								</table>
 
@@ -147,21 +149,20 @@
 					</div>
 
 					<div class="col-lg-4">
-						<div class="panel panel-green" id="list" style="height:200px;">
+						<div class="panel panel-green" id="list" style="height:220px;">
 							<div class="panel-heading">
 								<i class="fa fa-user-o fa-fw"></i> Profile
 							</div>
 							<!-- /.panel-heading -->
-							<div class="panel-body">
+							<div class="panel-body" style="overflow-x:auto; height:178px;">
 								<div class="tab-pane fade in active" id="profile">
 									<div class="row">
 										<div class="col-lg-6">
 											<a id="docPhoto"><img class="img-thumbnail" src="img/black.png"></a>
-											<!--data-toggle="modal" data-target="#modal_changePhoto"-->
-											<a  href="facUpload.php" style="float:right;" id="changePhoto"><i class="fa fa-pencil fa-fw"></i> Change Photo</a>
+											<a href="facUpload.php" style="float:right;" id="changePhoto"><i class="fa fa-pencil fa-fw"></i> Change Photo</a>
 										</div>
 
-										<div class="col-lg-6" id="viewProfile" style="margin-top: -10px;">
+										<div class="col-lg-6" id="viewProfile" style="margin-top: -20px;">
 											<form role="form"><br>
 												<h5 id="fullName"><?php echo  $vFirstName; ?> <?php echo  $vMiddleName; ?>. <?php echo  $vLastName; ?></h5>
 												<h5 id="num"><em><?php echo  $vcontactnum; ?></em></h5>
@@ -177,20 +178,20 @@
 					</div>
 
 					<div class="col-lg-4">
-						<div class="panel panel-green" id="list" style="height:240px;">
+						<div class="panel panel-green" id="list" style="height:220px;">
 							<div class="panel-heading">
 								<i class="fa fa-bell fa-fw"></i> Notifications
 							</div>
 							<!-- /.panel-heading -->
-							<div class="panel-body">
-                <?php
-                require ("database.php");
-                $sql="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, account.Username FROM file INNER JOIN user on user.UserID = file.UserID INNER JOIN account on account.AccountID = user.AccountID WHERE file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE() ORDER BY file.DateUpload ASC  ";
-                $result1 = mysqli_query($conn,$sql);
+							<div class="panel-body" style="overflow-y:auto; height:176px;">
+								<?php
+							require ("database.php");
+							$sql="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, account.Username FROM file INNER JOIN user on user.UserID = file.UserID INNER JOIN account on account.AccountID = user.AccountID WHERE file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE() ORDER BY file.DateUpload ASC  ";
+							$result1 = mysqli_query($conn,$sql);
 
-                 ?>
-								<div class="list-group" style="height:165px;">
-                  <?php while ($notification = mysqli_fetch_object($result1)){?>
+							 ?>
+								<div class="list-group">
+									<?php while ($notification = mysqli_fetch_object($result1)){?>
 									<span href="#" class="list-group-item">
 										<a data-toggle="modal" data-target="#modal_viewWLAP" id="coursecode">
                       <i class="fa fa-file-text-o fa-fw"></i>&nbsp;<?php echo $notification->CourseCode;?></a><br>
@@ -212,7 +213,6 @@
 				<!-- Popup for viewing WLAP -->
 				<div class="modal fade" id="modal_viewWLAP" role="dialog">
 					<div class="modal-dialog">
-
 					  <!-- Modal content-->
 					  <div class="modal-content">
 						<div class="modal-header">
@@ -220,7 +220,6 @@
 						  <h4 class="modal-title" id="coursecode">COE 002A</h4>
 						  Revised by:&nbsp;<em id="faculty" style="color:#d9d9d9;">arvillanueva</em> on
 						  <em id="datetime" style="color:#d9d9d9;">Jan. 28 | 1:02PM</em>
-
 						</div>
 						<div class="modal-body">
 							...
@@ -239,14 +238,11 @@
 						  <button type="button" class="close" data-dismiss="modal">&times;</button>
 						  <h4 class="modal-title">Change Display Photo</h4>
 						</div>
-						<?php
-						include 'upload_crop.php';
-						?>
-						<!--<div class="modal-body" style="height: 700px;">
-            <input type="file" name="fileToUpload" id="fileToUpload"><br>
+						<div class="modal-body" style="height: 350px;">
+							<input type="file" name="fileToUpload" id="fileToUpload"><br>
 							<a id="submit"><i class="fa fa-check fa-fw"></i><b>Submit</b></a> &nbsp;&nbsp;
 							<a onclick="hidePhotoInput()" id="can"><i class="fa fa-close fa-fw"></i><b>Cancel</b></a>
-						</div> -->
+						</div>
 					  </div>
 					</div>
 				</div>
