@@ -212,3 +212,8 @@ img {
 	padding-bottom: 5px;
 	height: 50px;
 }
+
+.pdfobject-container{
+	width:100%;
+	height: calc(100vh - 150px);
+}
