@@ -2,9 +2,10 @@
 
 
     require("database.php");
-    require("session.php");
+    require("sessionadmin.php");
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -57,20 +58,21 @@
 				<div class="navbar-default sidebar" role="navigation">
 					<div class="sidebar-nav navbar-collapse text-center">
 						<ul class="nav" id="side-menu">
-							<li>
-								<a href="facHome.php"><i class="fa fa-3x fa-home fa-fw"></i><br>Home</a>
+              <li>
+								<a href="adminHome.php"><i class="fa fa-3x fa-home fa-fw"></i><br>Home</a>
 							</li>
 							<li>
-								<a href="facWLAP.php"><i class="fa fa-3x fa-calendar-o fa-fw"></i><br>WLAP</a>
+								<a href="#"><i class="fa fa-3x fa-calendar-o fa-fw"></i><br>WLAP</a>
 							</li>
 							<li>
-								<a href="#"><i class="fa fa-3x fa-file-text-o fa-fw"></i><br>Syllabus</a>
+								<a href="adminSyllabus.php"><i class="fa fa-3x fa-file-text-o fa-fw"></i><br>Syllabus</a>
 							</li>
-
 							<li>
-								<a href="logout.php"><i class="fa fa-3x fa-sign-out fa-fw"></i><br>Logout</a>
+								<a href="adminFacultyMgmt.html"><i class="fa fa-3x fa-id-card-o fa-fw"></i><br>Faculty</a>
 							</li>
-
+							<li>
+								<a href="adminlogout.php"><i class="fa fa-3x fa-sign-out fa-fw"></i><br>Logout</a>
+							</li>
 						</ul>
 					</div>
 					<!-- /.sidebar-collapse -->
@@ -171,7 +173,7 @@
 														<a data-toggle="modal" data-target="#modal_viewSyllabus" id="down"><?php echo $othercourses->CourseName;?></a>
 													</td>
 													<td>
-														<a onclick=""><i class="fa fa-download fa-fw"></i>Download</a>
+                            	<a href="">Download</a> | <a href="docViewRecord.php?id=<?php echo $patient->PatientID;?>">Upload</a>
 													</td>
 												</tr>
                          <?php } ?>

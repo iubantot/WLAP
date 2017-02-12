@@ -186,19 +186,35 @@
 							<div class="panel-body" style="overflow-y:auto; height:176px;">
 								<?php
 							require ("database.php");
-							$sql="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, account.Username FROM file INNER JOIN user on user.UserID = file.UserID INNER JOIN account on account.AccountID = user.AccountID WHERE file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE() ORDER BY file.DateUpload ASC  ";
+							$sql="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, account.Username FROM file INNER JOIN user on user.UserID = file.UserID INNER JOIN account on account.AccountID = user.AccountID WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (account.AccountID != '".$IaccountID."') ORDER BY file.DateUpload ASC  ";
 							$result1 = mysqli_query($conn,$sql);
 
 							 ?>
+               <?php
+             require ("database.php");
+             $sql1="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, account.Username, account.accountID ,file.Status FROM file INNER JOIN user on user.UserID = file.UserID INNER JOIN account on account.AccountID = user.AccountID WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (account.AccountID = '".$IaccountID."') ORDER BY file.DateUpload ASC  ";
+             $result2 = mysqli_query($conn,$sql1);
+
+              ?>
 								<div class="list-group">
+                  		<span href="#" class="list-group-item">
 									<?php while ($notification = mysqli_fetch_object($result1)){?>
-									<span href="#" class="list-group-item">
+
 										<a data-toggle="modal" data-target="#modal_viewWLAP" id="coursecode">
+
                       <i class="fa fa-file-text-o fa-fw"></i>&nbsp;<?php echo $notification->CourseCode;?></a><br>
   										<span class="pull-left text-muted small">Revised by: <em id="faculty"><?php echo $notification->Username;?></em></span>
   										<span class="pull-right text-muted small" id="datetime"><?php echo $notification->DateUpload;?> | <?php echo $notification->TimeUpload;?></span>
-                    </span>
+
                   <?php } ?>
+                  <?php while ($notification2 = mysqli_fetch_object($result2)){?>
+                    <a data-toggle="modal" data-target="#modal_viewWLAP" id="coursecode">
+                      <i class="fa fa-file-text-o fa-fw"></i>&nbsp;<?php echo $notification2->CourseCode;?></a><br>
+                      <span class="pull-left text-muted small">Status: <em id="faculty"><?php echo $notification2->Status;?></em></span>
+                      <span class="pull-right text-muted small" id="datetime"><?php echo $notification2->DateUpload;?> | <?php echo $notification2->TimeUpload;?></span>
+
+                  <?php } ?>
+                </span>
 								</div>
 								<!-- /.list-group -->
 

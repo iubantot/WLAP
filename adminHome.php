@@ -1,3 +1,11 @@
+<?php
+
+
+    require("database.php");
+    require("sessionadmin.php");
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,16 +18,16 @@
 
 		<title>Admin | WLAP and Syllabus Management System</title>
 
-		<!-- Styles -->	
+		<!-- Styles -->
 		<style>
 			body {
 				background:none !important;
 				background-color: #fff !important;
 			}
 		</style>
-		
+
 		<link href="css/bootstrap.min.css" rel="stylesheet">
-		
+
 		<link href="css/style.css" rel="stylesheet">
 
 		<!-- Custom Fonts -->
@@ -42,9 +50,9 @@
 					<a class="navbar-brand" href="#"><img src="img/logo.png" style="margin-top:-12px;"></a>
 				</div>
 				<!-- /.navbar-header -->
-			
+
 				<ul class="nav navbar-nav navbar-right" style="margin-right:25px;">
-					<li><a href="#"><i class="fa fa-user-circle-o fa-fw"></i>&nbsp;Name here</a></li>
+					<li><a href="#"><i class="fa fa-user-circle-o fa-fw"></i>&nbsp;<?php echo  $vFirstName; ?> <?php echo  $vMiddleName; ?>. <?php echo  $vLastName; ?></a></li>
 				</ul>
 
 				<div class="navbar-default sidebar" role="navigation">
@@ -54,24 +62,24 @@
 								<a href="#"><i class="fa fa-3x fa-home fa-fw"></i><br>Home</a>
 							</li>
 							<li>
-								<a href="adminWLAP.html"><i class="fa fa-3x fa-calendar-o fa-fw"></i><br>WLAP</a>
+								<a href="adminWLAP.php"><i class="fa fa-3x fa-calendar-o fa-fw"></i><br>WLAP</a>
 							</li>
 							<li>
-								<a href="adminSyllabus.html"><i class="fa fa-3x fa-file-text-o fa-fw"></i><br>Syllabus</a>
+								<a href="adminSyllabus.php"><i class="fa fa-3x fa-file-text-o fa-fw"></i><br>Syllabus</a>
 							</li>
 							<li>
 								<a href="#"><i class="fa fa-3x fa-id-card-o fa-fw"></i><br>Faculty</a>
 							</li>
 							<li>
-								<a href="adminLogin.html"><i class="fa fa-3x fa-sign-out fa-fw"></i><br>Logout</a>
-							</li>													
+								<a href="adminlogout.php"><i class="fa fa-3x fa-sign-out fa-fw"></i><br>Logout</a>
+							</li>
 						</ul>
 					</div>
 					<!-- /.sidebar-collapse -->
 				</div>
 				<!-- /.navbar-static-side -->
 			</nav>
-			
+
 			<div id="page-wrapper">
 				<div class="row">
 					<div class="col-lg-12">
@@ -79,7 +87,7 @@
 					</div>
 					<!-- /.col-lg-12 -->
 				</div>
-				
+
 				<div class="row">
 					<div class="col-lg-8">
 						<div class="panel panel-green">
@@ -87,14 +95,23 @@
 								<i class="fa fa-calendar fa-fw"></i> Schedule
 							</div>
 							<!-- /.panel-heading -->
-							
+
 							<div class="panel-body">
-								
+
 								<form class="navbar-form">
 									<div class="form-group">
 										<input type="text" placeholder="Search for..." class="form-control">
 									</div>
-								</form>	
+								</form>
+                <?php
+
+                $t=date('d-m-Y');
+                $p=date("D",strtotime($t));
+                require ("database.php");
+                $sql="Select c.CourseName,s.CourseCode,s.ScheduleDay,s.ScheduleTimeIN,s.ScheduleTimeOUT,s.Section,s.Room from schedule s INNER JOIN course c ON c.CourseCode = s.CourseCode WHERE s.userID = '".$IuserID."' ORDER by c.CourseName ";
+                $result1 = mysqli_query($conn,$sql);
+
+                 ?>
 								<table class="table table-scroll table-striped">
 									<thead>
 										<tr>
@@ -106,53 +123,31 @@
 											<th>Room</th>
 										</tr>
 									</thead>
-								
+
 									<tbody>
-										<tr>
-											<td id="code">COE 002A</td>
-											<td id="desc">Introduction to Intellectual Property</td>
-											<td id="sec">CPE42FC1</td>
-											<td id="day">Friday</td>
-											<td id="time">04:30PM-07:30PM</td>
-											<td id="room">Q-3206</td>
-										</tr>
-										<tr>
-											<td id="code">COE 002A</td>
-											<td id="desc">Introduction to Intellectual Property</td>
-											<td id="sec">CPE42FC1</td>
-											<td id="day">Friday</td>
-											<td id="time">04:30PM-07:30PM</td>
-											<td id="room">Q-3206</td>
-										</tr>
-										<tr>
-											<td id="code">COE 002A</td>
-											<td id="desc">Introduction to Intellectual Property</td>
-											<td id="sec">CPE42FC1</td>
-											<td id="day">Friday</td>
-											<td id="time">04:30PM-07:30PM</td>
-											<td id="room">Q-3206</td>
-										</tr>
-										<tr>
-											<td id="code">COE 002A</td>
-											<td id="desc">Introduction to Intellectual Property</td>
-											<td id="sec">CPE42FC1</td>
-											<td id="day">Friday</td>
-											<td id="time">04:30PM-07:30PM</td>
-											<td id="room">Q-3206</td>
-										</tr>
+										<?php while ($schedule = mysqli_fetch_object($result1)){?>
+											<tr>
+												<td id="code"><?php echo $schedule->CourseCode;?></td>
+												<td id="desc"><?php echo $schedule->CourseName;?></td>
+												<td id="sec"><?php echo $schedule->Section;?></td>
+												<td id="day"><?php echo $schedule->ScheduleDay;?></td>
+												<td id="time"><?php echo $schedule->ScheduleTimeIN;?>-<?php echo $schedule->ScheduleTimeOUT;?></td>
+												<td id="room"><?php echo $schedule->Room;?></td>
+											</tr>
+	                         <?php } ?>
 									</tbody>
 								</table>
-								
+
 								<!-- Tab panes -->
 								<div class="tab-content">
-									
+
 								</div>
 							</div>
 							<!-- /.panel-body -->
 						</div>
 						<!-- /.panel -->
 					</div>
-					
+
 					<div class="col-lg-4">
 						<div class="panel panel-green" id="list" style="height:220px;">
 							<div class="panel-heading">
@@ -165,14 +160,13 @@
 										<div class="col-lg-6">
 											<a id="docPhoto"><img class="img-thumbnail" src="img/black.png"></a>
 											<a data-toggle="modal" data-target="#modal_changePhoto" style="float:right;" id="changePhoto"><i class="fa fa-pencil fa-fw"></i> Change Photo</a>
-										</div>		
-										
+										</div>
+
 										<div class="col-lg-6" id="viewProfile" style="margin-top: -20px;">
 											<form role="form"><br>
-												<h5 id="fullName">Ma. Cecilia A. Venal</h5>
-												<h5 id="num"><em>+639011111111</em></h5>
-												<h5 id="email"><em>myemail@gmail.commmmmmmmmmmm</em></h5>
-											</form>
+                        <h5 id="fullName"><?php echo  $vFirstName; ?> <?php echo  $vMiddleName; ?>. <?php echo  $vLastName; ?></h5>
+                        <h5 id="num"><em><?php echo  $vcontactnum; ?></em></h5>
+                        <h5 id="email"><em><?php echo  $vemail; ?></em></h5>
 										</div>
 									</div>
 								</div>
@@ -181,27 +175,40 @@
 						</div>
 						<!-- /.panel -->
 					</div>
-					
+
 					<div class="col-lg-4">
 						<div class="panel panel-green" id="list" style="height:220px;">
 							<div class="panel-heading">
 								<i class="fa fa-bell fa-fw"></i> Notifications
 								<a data-toggle="modal" data-target="#modal_viewNotif" class="pull-right"><i class="fa fa-expand fa-fw"></i></a>
 							</div>
+
+
 							<!-- /.panel-heading -->
 							<div class="panel-body" style="overflow-y:auto; height:176px;">
+                <?php
+							require ("database.php");
+							$sql="SELECT file.FileID,file.CourseCode,file.DateUpload, file.TimeUpload, account.Username FROM file INNER JOIN user on user.UserID = file.UserID INNER JOIN account on account.AccountID = user.AccountID WHERE file.Status = 'For Review' ORDER BY file.DateUpload ASC  ";
+							$result1 = mysqli_query($conn,$sql);
+
+							 ?>
+
 								<div class="list-group" style="height:165px;">
+                  	<?php while ($notification = mysqli_fetch_object($result1)){?>
 									<span href="#" class="list-group-item" style="height:100px;">
 										<a data-toggle="modal" data-target="#modal_viewWLAP" id="coursecode">
-										<i class="fa fa-file-text-o fa-fw"></i>&nbsp;COE 002A</a><br>
-										<span class="pull-left text-muted small">Revised by: <em id="faculty">arvillanueva</em></span>
-										<span class="pull-right text-muted small" id="datetime">Jan. 28 | 1:02PM</span>
+                    <span class="pull-left text-muted small" style="display:hidden;" ><em id="faculty" name="FileID" ><?php echo $notification->FileID;?></em></span>
+										<i class="fa fa-file-text-o fa-fw" ></i>&nbsp;<?php echo $notification->CourseCode;?></a><br>
+										<span class="pull-left text-muted small">Revised by: <em id="faculty"><?php echo $notification->Username;?></em></span>
+										<span class="pull-right text-muted small" id="datetime"><?php echo $notification->DateUpload;?> | <?php echo $notification->TimeUpload;?></span>
 										<div class="row text-center">
-											<button class="btn btn-sub" style="width:40%;"><i class="fa fa-check"></i> Approve</button>
-											<button class="btn btn-sub" style="width:40%;"><i class="fa fa-times"></i> Reject</button>
+											<button type="submit" class="btn btn-sub" style="width:40%;" name="Approve"><i class="fa fa-check"></i><a href="approve.php?id=<?php echo $notification->FileID;?>"> Approve</a></button>
+											<button  type="submit" class="btn btn-sub" style="width:40%;" name="Reject"><i class="fa fa-times"></i><a href="reject.php?id=<?php echo $notification->FileID;?>"> Reject</a></button>
 										</div>
 									</span>
+                    <?php } ?>
 								</div>
+
 								<!-- /.list-group -->
 							</div>
 							<!-- /.panel-body -->
@@ -210,7 +217,7 @@
 					</div>
 				</div>
 				<!-- /.row -->
-				
+
 				<!-- Popup for viewing WLAP -->
 				<div class="modal fade" id="modal_viewWLAP" role="dialog">
 					<div class="modal-dialog">
@@ -228,7 +235,7 @@
 					</div>
 				</div>
 				<!-- /#Popup window -->
-				
+
 				<!-- Popup for changing photo -->
 				<div class="modal fade" id="modal_changePhoto" role="dialog">
 					<div class="modal-dialog">
@@ -241,13 +248,13 @@
 						<div class="modal-body" style="height: 350px;">
 							<input type="file" name="fileToUpload" id="fileToUpload"><br>
 							<a id="submit"><i class="fa fa-check fa-fw"></i><b>Submit</b></a> &nbsp;&nbsp;
-							<a onclick="hidePhotoInput()" id="can"><i class="fa fa-close fa-fw"></i><b>Cancel</b></a> 
+							<a onclick="hidePhotoInput()" id="can"><i class="fa fa-close fa-fw"></i><b>Cancel</b></a>
 						</div>
 					  </div>
 					</div>
 				</div>
 				<!-- /#Popup window -->
-				
+
 				<!-- Popup for viewing notifications -->
 				<div class="modal fade" id="modal_viewNotif" role="dialog">
 					<div class="modal-dialog">
@@ -258,19 +265,28 @@
 						  <h4 class="modal-title">Notifications</h4>
 						</div>
 						<div class="modal-body" style="width:500px;">
+              <?php
+            require ("database.php");
+            $sql="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, account.Username FROM file INNER JOIN user on user.UserID = file.UserID INNER JOIN account on account.AccountID = user.AccountID WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND file.Status = 'For Review' ORDER BY file.DateUpload ASC";
+            $result1 = mysqli_query($conn,$sql);
+
+             ?>
 							<div class="list-group" style="height:165px;">
+                <?php while ($notification = mysqli_fetch_object($result1)){?>
 								<span href="#" class="list-group-item" style="height:90px;">
 									<div class="col-lg-8" style="margin-left:-20px;">
 										<a data-dismiss="modal" data-toggle="modal" data-target="#modal_viewWLAP" id="coursecode">
-										<i class="fa fa-file-text-o fa-fw"></i>&nbsp;COE 002A</a><br>
-										<span class="pull-left text-muted small" style="margin-top:25px;">Revised by: <em id="faculty">arvillanueva</em></span><br>
-										<span class="pull-left text-muted small">Uploaded on: <em>Jan. 28 | 1:02PM</em></span>
+										<i class="fa fa-file-text-o fa-fw"></i>&nbsp;<?php echo $notification->CourseCode;?></a><br>
+                    <span class="pull-left text-muted small" style="margin-top:25px;">Revised by: <em id="faculty"><?php echo $notification->Username;?></em></span><br>
+                    <span class="pull-left text-muted small">Uploaded on: <em><?php echo $notification->DateUpload;?> | <?php echo $notification->TimeUpload;?></em></span>
+
 									</div>
 									<div class="col-lg-4" style="margin:-12px 0 0 20px;">
 										<button class="btn btn-sub" style="width:100%; margin-bottom:-10px;"><i class="fa fa-check"></i> Approve</button><br>
 										<button class="btn btn-sub" style="width:100%;"><i class="fa fa-times"></i> Reject</button>
 									</div>
 								</span>
+                  <?php } ?>
 							</div>
 							<!-- /.list-group -->
 						</div>
@@ -278,7 +294,7 @@
 					</div>
 				</div>
 				<!-- /#Popup window -->
-				
+
 				<!-- Footer -->
 				<footer class="text-center">
 					<div class="footer-below">
@@ -291,7 +307,7 @@
 						</div>
 					</div>
 				</footer>
-				
+
 			</div>
 			<!-- /#page-wrapper -->
 		</div>
@@ -302,13 +318,13 @@
 
 		<!-- Bootstrap Core JavaScript -->
 		<script src="js/bootstrap.min.js"></script>
-		
+
 		<!-- Metis Menu Plugin JavaScript -->
 		<script src="js/metisMenu.min.js"></script>
-		
+
 		<!-- Custom Theme JavaScript -->
 		<script src="js/sb-admin-2.js"></script>
-		
+
 		<script src="js/customJS.js"></script>
 
 	</body>

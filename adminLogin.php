@@ -1,3 +1,14 @@
+<?php
+    include('loginadmin.php'); // Includes Login Script
+
+    if(isset($_SESSION['login_user'])){
+
+            header("location: adminHome.php");
+
+            }
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,9 +30,9 @@
 				background-color: #fff !important;
 			}
 		</style>
-		
+
 		<link href="css/bootstrap.min.css" rel="stylesheet">
-		
+
 		<link href="css/style.css" rel="stylesheet">
 
 		<!-- Custom Fonts -->
@@ -40,17 +51,17 @@
 							<span class="icon-bar"></span>
 						</button>
 						<a class="navbar-brand" href="#"><img src="img/logo3.png" style="margin-top:-12px;"></a>
-					</div>	
+					</div>
 				</div>
 			</nav>
-		
+
 			<div id="page-wrapper"> <br><br><br><br><br>
 				<div class="container">
 					<div class="row">
 						<div class="col-lg-7 col-md-6">
 
 						</div>
-						
+
 						<div class="col-lg-5 col-md-6">
 							<div class="panel panel-blue">
 								<div class="panel-heading">
@@ -59,25 +70,25 @@
 									</div>
 								</div>
 								<!-- /.panel-heading -->
-											
+
 								<div class="panel-body">
-									<form role="form">
-										<div class="col-lg-1"></div>
-										<div class="form-group col-lg-10">
-											<label for=username>Username</label>
-											<input class="form-control" id="username" type="text" placeholder="Enter username" required><br>
-											<label for=pass>Password</label>
-											<input class="form-control" id="pass" type="password" placeholder="Enter password" required>
-											<button href="adminHome.html" class="btn btn-sub"><b>Login &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i></b></button> 	
-										</div>	
-									</form>
-																		
+                  <form role="form"  action="" method="post">
+                    <div class="col-lg-1"></div>
+                    <div class="form-group col-lg-10">
+                      <label for=username>Username</label>
+                      <input class="form-control" id="Username" name="Username"  type="text" placeholder="Enter username" required><br>
+                      <label for=pass>Password</label>
+                      <input class="form-control" id="Password" name="Password" type="password" placeholder="Enter password" required>
+                      <button type="submit" class="btn btn-sub" name="login"><b>Login &nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i></b></button>
+                    </div>
+                  </form>
+
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-											
+
 				<!-- Footer --><br><br><br><br><br>
 				<footer class="text-center">
 					<div class="footer-below">
@@ -90,17 +101,17 @@
 						</div>
 					</div>
 				</footer>
-			
+
 			</div>
 			<!-- /#page-wrapper -->
 		</div>
 		<!-- /#wrapper -->
-		
+
 		<!-- Scripts -->
 		<script src="js/jquery.min.js"></script>
 
 		<script src="js/bootstrap.min.js"></script>
-		
+
 	</body>
 
 </html>

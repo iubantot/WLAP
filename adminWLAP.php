@@ -1,3 +1,10 @@
+<?php
+
+
+    require("database.php");
+    require("sessionadmin.php");
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,16 +17,16 @@
 
 		<title>Admin | WLAP and Syllabus Management System</title>
 
-		<!-- Styles -->	
+		<!-- Styles -->
 		<style>
 			body {
 				background:none !important;
 				background-color: #fff !important;
 			}
 		</style>
-		
+
 		<link href="css/bootstrap.min.css" rel="stylesheet">
-		
+
 		<link href="css/style.css" rel="stylesheet">
 
 		<!-- Custom Fonts -->
@@ -42,37 +49,37 @@
 					<a class="navbar-brand" href="#"><img src="img/logo.png" style="margin-top:-12px;"></a>
 				</div>
 				<!-- /.navbar-header -->
-				
+
 				<ul class="nav navbar-nav navbar-right" style="margin-right:25px;">
-					<li><a href="#"><i class="fa fa-user-circle-o fa-fw"></i>&nbsp;Name here</a></li>
+					<li><a href="#"><i class="fa fa-user-circle-o fa-fw"></i>&nbsp;<?php echo  $vFirstName; ?> <?php echo  $vMiddleName; ?>. <?php echo  $vLastName; ?></a></li>
 				</ul>
 
 				<div class="navbar-default sidebar" role="navigation">
 					<div class="sidebar-nav navbar-collapse text-center">
 						<ul class="nav" id="side-menu">
 							<li>
-								<a href="adminHome.html"><i class="fa fa-3x fa-home fa-fw"></i><br>Home</a>
+								<a href="adminHome.php"><i class="fa fa-3x fa-home fa-fw"></i><br>Home</a>
 							</li>
 							<li>
 								<a href="#"><i class="fa fa-3x fa-calendar-o fa-fw"></i><br>WLAP</a>
 							</li>
 							<li>
-								<a href="adminSyllabus.html"><i class="fa fa-3x fa-file-text-o fa-fw"></i><br>Syllabus</a>
+								<a href="adminSyllabus.php"><i class="fa fa-3x fa-file-text-o fa-fw"></i><br>Syllabus</a>
 							</li>
 							<li>
 								<a href="adminFacultyMgmt.html"><i class="fa fa-3x fa-id-card-o fa-fw"></i><br>Faculty</a>
 							</li>
 							<li>
-								<a href="adminLogin.html"><i class="fa fa-3x fa-sign-out fa-fw"></i><br>Logout</a>
-							</li>							
-													
+								<a href="adminlogout.php"><i class="fa fa-3x fa-sign-out fa-fw"></i><br>Logout</a>
+							</li>
+
 						</ul>
 					</div>
 					<!-- /.sidebar-collapse -->
 				</div>
 				<!-- /.navbar-static-side -->
 			</nav>
-			
+
 			<div id="page-wrapper">
 				<div class="row">
 					<div class="col-lg-12">
@@ -80,14 +87,14 @@
 					</div>
 					<!-- /.col-lg-12 -->
 				</div>
-				
+
 				<div class="row">
 					<div class="col-lg-7">
 						<div class="panel panel-green">
 							<div class="panel-heading">
 								<i class="fa fa-search fa-fw"></i>&nbsp; Search WLAP
 							</div>
-							<!-- /.panel-heading -->							
+							<!-- /.panel-heading -->
 							<div class="panel-body">
 								<!-- Nav tabs -->
 								<ul class="nav nav-tabs nav-justified">
@@ -104,6 +111,15 @@
 										  <input type="text" placeholder="Search for..." class="form-control">
 										</div>
 									</form>
+                  <?php
+
+								$t=date('d-m-Y');
+								$p=date("D",strtotime($t));
+								require ("database.php");
+								$sql="Select distinct c.CourseName,s.CourseCode from schedule s INNER JOIN course c ON c.CourseCode = s.CourseCode WHERE s.userID = '".$IuserID."' ORDER by c.CourseName ";
+								$result1 = mysqli_query($conn,$sql);
+
+								 ?>
 									<div class="tab-pane fade in active" id="mycourses">
 										<table class="table table-scroll table-striped">
 											<thead>
@@ -113,16 +129,27 @@
 													<th>Action</th>
 												</tr>
 											</thead>
-									
+
 											<tbody style="width:80%; height:50%;">
-												<tr>
-													<td id="code">COE 002A</td>
-													<td id="desc">Introduction to Intellectual Property</td>
-													<td><a onclick="showWLAPList()">View list</a></td>
-												</tr>
-											</tbody>
+                        <?php while ($course = mysqli_fetch_object($result1)){?>
+                        <tr>
+                          <td id="code"><?php echo $course->CourseCode;?></td>
+                          <td id="desc"><?php echo $course->CourseName;?></td>
+                          <td><a onclick="showWLAPList()">View list</a></td>
+                        </tr>
+                             <?php } ?>
+                      </tbody>
 										</table>
 									</div>
+                  <?php
+
+                  $t=date('d-m-Y');
+                  $p=date("D",strtotime($t));
+                  require ("database.php");
+                  $sql="Select distinct T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID is NULL ORDER by CourseName";
+                  $result1 = mysqli_query($conn,$sql);
+
+                   ?>
 									<div class="tab-pane fade" id="other">
 										<table class="table table-scroll table-striped">
 											<thead>
@@ -132,13 +159,15 @@
 													<th>Action</th>
 												</tr>
 											</thead>
-									
+
 											<tbody style="width:80%; height:50%;">
-												<tr>
-													<td id="code">CPE 501</td>
-													<td id="desc">Computer Networks Design</td>
-													<td><a onclick="showWLAPList2()" id="view">View list</a></td>
-												</tr>
+                        <?php while ($othercourses = mysqli_fetch_object($result1)){?>
+    										<tr>
+    											<td id="code"><?php echo $othercourses->CourseCode;?></td>
+    											<td id="desc"><?php echo $othercourses->CourseName;?></td>
+    											<td><a onclick="showWLAPList2()">View list</a></td>
+    										</tr>
+                             <?php } ?>
 											</tbody>
 										</table>
 									</div>
@@ -149,7 +178,7 @@
 						<!-- /.panel -->
 					</div>
 					<!-- /.col-lg-6 -->
-					
+
 					<div class="col-lg-4">
 						<!-- WLAP List of My Courses -->
 						<div class="panel panel-green" style="display:none;" id="WLAPList">
@@ -157,7 +186,7 @@
 								COE 002A WLAP List
 							</div>
 							<!-- /.panel-heading -->
-							
+
 							<div class="panel-body" style="overflow-y:auto; height:415px;">
 								<div class="list-group">
 									<span href="#" class="list-group-item">
@@ -169,21 +198,21 @@
 											<li><a onclick="" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
 											<li><a onclick="" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
 											<li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
-										</ul>	
+										</ul>
 									</span>
 								</div>
 							</div>
 							<!-- /.panel-body -->
 						</div>
 						<!-- /.panel -->
-						
+
 						<!-- WLAP List of Other Courses -->
 						<div class="panel panel-green" style="display:none;" id="WLAPList2">
 							<div class="panel-heading" id="code">
 								CPE 501 WLAP List
 							</div>
 							<!-- /.panel-heading -->
-							
+
 							<div class="panel-body" style="overflow-y:auto; height:415px;">
 								<!-- Tab panes -->
 								<div class="tab-content">
@@ -195,7 +224,7 @@
 											</a>
 											<ul class="dropdown-menu">
 												<li><a onclick="" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-											</ul>	
+											</ul>
 										</span>
 									</div>
 								</div>
@@ -203,13 +232,13 @@
 							<!-- /.panel-body -->
 						</div>
 						<!-- /.panel -->
-						
+
 					</div>
 					<!-- /.col-lg-4 -->
-					
+
 				</div>
 				<!-- /.row -->
-				
+
 				<!-- Popup for remarks -->
 				<div class="modal fade" id="modal_viewWLAP" role="dialog">
 					<div class="modal-dialog">
@@ -226,7 +255,7 @@
 					</div>
 				</div>
 				<!-- /#Popup window -->
-				
+
 				<!-- Popup view of WLAP -->
 				<div class="modal fade" id="modal_remarks" role="dialog">
 					<div class="modal-dialog">
@@ -234,21 +263,25 @@
 					  <div class="modal-content">
 						<div class="modal-header">
 						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-						  <h4 class="modal-title">COE 002A - Week 1 Remars</h4>
+						  <h4 class="modal-title">COE 002A - Week 1 Remarks</h4>
 						</div>
 						<div class="modal-body" style="height: 350px;"><br>
 							<div class="form-group">
 								Add remarks here:
 								<textarea class="form-control" rows="6" id="comment"></textarea>
 							</div>
-							
+
 							<span class="pull-right" style="margin-top:-20px;">
 								<button href="facHome.html" class="btn btn-sub"><b>Submit</b></button>
-							</span>	
-							
+							</span>
+              <?php
+              date_default_timezone_set('asia/manila');
+              $date=date('d-m-Y');
+              $time = date("h:i");
+              ?>
 							<span class="pull-left text-muted small" style="display:block;">
-								Added on 07:30PM Jan. 30, 2017
-							</span>							
+								Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
+							</span>
 						</div>
 						<!-- /#modal-body -->
 					  </div>
@@ -256,7 +289,7 @@
 					</div>
 				</div>
 				<!-- /#Popup window -->
-				
+
 				<!-- Footer -->
 				<footer class="text-center">
 					<div class="footer-below">
@@ -269,7 +302,7 @@
 						</div>
 					</div>
 				</footer>
-				
+
 			</div>
 			<!--/#page-wrapper -->
 		</div>
@@ -280,13 +313,13 @@
 
 		<!-- Bootstrap Core JavaScript -->
 		<script src="js/bootstrap.min.js"></script>
-		
+
 		<!-- Metis Menu Plugin JavaScript -->
 		<script src="js/metisMenu.min.js"></script>
-		
+
 		<!-- Custom Theme JavaScript -->
 		<script src="js/sb-admin-2.js"></script>
-		
+
 		<script src="js/customJS.js"></script>
 
 	</body>
