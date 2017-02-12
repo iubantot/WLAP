@@ -253,18 +253,20 @@
 				<!-- /.row -->
 
 				<!-- Popup for remarks -->
-				<div class="modal fade" id="modal_viewWLAP" role="dialog">
-					<div class="modal-dialog">
-					  <!-- Modal content-->
-					  <div class="modal-content">
-						<div class="modal-header">
-						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-						  <h4 class="modal-title">COE 002A - Week 1</h4>
+				<div class="container-pdf">
+					<div class="modal fade" id="modal_viewWLAP" role="dialog" data-backdrop="static">
+						<div class="modal-dialog modal-lg">
+						  <!-- Modal content-->
+							 <div class="modal-content">
+								<div class="modal-header">
+								  <button type="button" class="close" data-dismiss="modal">&times;</button>
+								  <h4 class="modal-title">COE 002A - Week 1</h4>
+								</div>
+								<div class="modal-body">
+									<div id="pdf-container"></div> <!--contrainer for view pdf -->
+								</div>
+							 </div>
 						</div>
-						<div class="modal-body">
-							...
-						</div>
-					  </div>
 					</div>
 				</div>
 				<!-- /#Popup window -->
@@ -321,24 +323,6 @@
 		</div>
 		<!-- /#wrapper -->
 		
-		
-<!-- VIEW PDF modal -->
-<div class="containter">
-	<div class="container-pdf">
-		<div class="modal fade" id="pdf_modal" data-backdrop="static">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" style="font-size:15px;">&times;</button>
-					</div>
-					<div class="modal-body">
-						<div id="pdf-container"></div> <!--contrainer for view pdf -->
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 
 		 <!-- jQuery -->
 		<script src="js/jquery.min.js"></script>
