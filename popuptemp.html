@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+	
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>Seek-a-Pedia</title>
+
+		<!-- Styles -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		
+		<link href="css/style.css" rel="stylesheet">
+
+		<!-- Custom Fonts -->
+		<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	</head>
+
+	<body>
+		
+		<div id="wrapper">
+			
+			<nav class="navbar navbar-default navbar-fixed-top">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#"><img src="img/logo.png"></a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="nav navbar-nav navbar-right">
+							<li><a href="#"><i class="fa fa-home fa-fw"></i>Home</a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+									<i class="fa fa-user fa-fw"></i>Name here 
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a href="userProfile.html">My Profile</a></li>
+									<li><a href="userRecords.html">My Records</a></li>
+									<li role="separator" class="divider"></li>
+									<li><a href="index.html">Logout</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div><!--/.navbar-collapse -->
+				</div>
+			</nav>
+		
+	
+		<div id="page-wrapper"> <br>
+			<div class="container">
+				<div class="col-lg-12" style="color:#cc0000; margin-bottom: 5px;"><h4><b>Select a Hospital</b></h4></div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-9" id="map">
+						<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBM3yBzCkRqMrEBwDgxYyQNza6ioy3yB_s&libraries=places&callback=initMap" async defer></script>
+					</div>
+						
+					<div class="col-lg-3">
+						<div class="panel panel-red">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-xs-3">
+										<i class="fa fa-bell fa-5x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<h2><b>1</b></h2>
+										<h5>Notifications</h5>
+									</div>
+								</div>
+							</div>
+							<div class="panel-footer">
+								<div class="list-group">
+									<span href="#" class="list-group-item">
+										<small>Appointment Status: </small><span class="text-muted small" id="stat"><b>Approved</b></span><br>
+										<small>Appointment ID: </small><span class="text-muted small" id="appID">123456</span><br>
+										<small>Schedule: </small><span class="text-muted small" id="sched">Monday 1:00PM-4:00PM | 12/12/12</span><br>
+									</span>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				
+				<!-- Popup window -->
+				<div class="modal fade" id="myModal" role="dialog">
+					<div class="modal-dialog">
+					
+					  <!-- Modal content-->
+					  <div class="modal-content">
+						<div class="modal-header">
+						  <button type="button" class="close" data-dismiss="modal">&times;</button>
+						  <h4 class="modal-title">Select a Pediatrician</h4>
+						</div>
+						<div class="modal-body">
+							<table class="table table-hover table-fixed">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>HMO Accreditations</th>
+										<th>Schedule</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="">
+										<th>Ethel Bulbasaur</th>
+										<td>Intellicare, Asian Life, Thug Life</td>
+										<td>M | 11:30AM-1:00PM <button type="book" class="btn btn-danger" onclick="showConfirm()">Book</button>
+										<br> W | 2:00PM-5:00PM <button type="book" class="btn btn-danger" onclick="showConfirm()">Book</td></button>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					  </div>
+					</div>
+				</div>
+				<!-- /#Popup window -->
+			</div>
+			<!-- /#page-wrapper -->
+		
+		<!-- Footer --><br><br>
+		<footer class="text-center">
+			<div class="footer-below">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							Copyright &copy; Seek-A-Pedia 2016
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+		
+		</div>
+		<!-- /#wrapper -->
+
+		<!-- Scripts -->
+		<script src="js/jquery.min.js"></script>
+
+		<script src="js/bootstrap.min.js"></script>
+
+		<script src="js/mapJS.js"></script>	
+			
+		<script src="js/userJS.js"></script>
+	
+		<script src="js/sb-admin-2.js"></script>
+		
+	</body>
+
+</html>
