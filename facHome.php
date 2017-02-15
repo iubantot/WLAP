@@ -158,7 +158,7 @@
 								<div class="tab-pane fade in active" id="profile">
 									<div class="row">
 										<div class="col-lg-6">
-											<a id="docPhoto"><img class="img-thumbnail" src="img/black.png"></a>
+											<a id="docPhoto"><img class="img-thumbnail" src="upload_pic/thumbnail_1485831187.jpg"></a>
 											<a href="facUpload.php" style="float:right;" id="changePhoto"><i class="fa fa-pencil fa-fw"></i> Change Photo</a>
 										</div>
 

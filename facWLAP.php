@@ -140,12 +140,12 @@
 											</tbody>
 										</table>
 									</div>
-									<?php
+                  <?php
 
                   $t=date('d-m-Y');
                   $p=date("D",strtotime($t));
                   require ("database.php");
-                  $sql="Select distinct c.CourseName,s.CourseCode from schedule s INNER JOIN course c ON c.CourseCode = s.CourseCode WHERE s.userID != '".$IuserID."' ORDER by c.CourseName ";
+                  $sql="Select distinct T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID is NULL ORDER by CourseName";
                   $result1 = mysqli_query($conn,$sql);
 
                    ?>
@@ -195,7 +195,7 @@
 										</a>
 										<ul class="dropdown-menu">
 											<li><a onclick="" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-											<li><a onclick="" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
+											<li><a data-toggle="modal" data-target="#modal_upload"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
 											<li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
 										</ul>
 									</span>
@@ -238,6 +238,37 @@
 				</div>
 				<!-- /.row -->
 
+        <!-- Popup for upload -->
+                <div class="modal fade" id="modal_upload" role="dialog">
+                  <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">COE 002A - Week 1 Remarks</h4>
+                    </div>
+                    <div class="modal-body" style="height: 350px;"><br>
+                      <div class="form-group">
+                      <?php
+                      include_once "facUploadRev.php"; ?>
+                      </div>
+                      <?php
+                    date_default_timezone_set('asia/manila');
+                    $date=date('d-m-Y');
+                    $time = date("h:i");
+                    ?>
+                      <span class="pull-left text-muted small" style="display:block;">
+                          Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
+                      </span>
+                    </div>
+                    <!-- /#modal-body -->
+                    </div>
+                    <!-- /#modal-content -->
+                  </div>
+                </div>
+                <!-- /#Popup window -->
+
+                
 				<!-- Popup for remarks -->
 				<div class="modal fade" id="modal_viewWLAP" role="dialog">
 					<div class="modal-dialog">
