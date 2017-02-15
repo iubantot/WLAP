@@ -36,7 +36,7 @@ $thumb_image_prefix = "thumbnail_";			// The prefix name to the thumb image
 $large_image_name = $large_image_prefix.$_SESSION['random_key'];     // New name of the large image (append the timestamp to the filename)
 $thumb_image_name = $thumb_image_prefix.$_SESSION['random_key'];     // New name of the thumbnail image (append the timestamp to the filename)
 $max_file = "3"; 							// Maximum file size in MB
-$max_width = "500";							// Max width allowed for the large image
+$max_width = "200";							// Max width allowed for the large image
 $thumb_width = "100";						// Width of thumbnail image
 $thumb_height = "100";						// Height of thumbnail image
 // Only one of these image types should be allowed for upload

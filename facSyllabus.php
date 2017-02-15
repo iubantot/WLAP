@@ -23,6 +23,15 @@
 				background:none !important;
 				background-color: #fff !important;
 			}
+			.container-pdf * > .modal-body{
+				width:100%;
+				height: calc(100vh - 125px);
+
+			}
+			.pdfobject-container{
+				width:100%;
+				height: calc(100vh - 155px);
+			}
 		</style>
 
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -189,20 +198,21 @@
 				<!-- /.row -->
 
 				<!-- Popup view of Syllabus -->
-				<div class="modal fade" id="modal_viewSyllabus" role="dialog">
-					<div class="modal-dialog">
-					  <!-- Modal content-->
-					  <div class="modal-content">
-						<div class="modal-header">
-						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-						  <h4 class="modal-title">CPE 501 - Syllabus</h4>
-						</div>
-						<div class="modal-body">
-							...
-						</div>
-						<!-- /#modal-body -->
-					  </div>
-					  <!-- /#modal-content -->
+				<div class="container-pdf">
+					<div class="modal fade" id="modal_viewSyllabus" role="dialog">
+						<div class="modal-dialog modal-lg">
+						  <!-- Modal content-->
+						  <div class="modal-content">
+							<div class="modal-header">
+							  <button type="button" class="close" data-dismiss="modal">&times;</button>
+							  <h4 class="modal-title">CPE 501 - Syllabus</h4>
+							</div>
+							<div class="modal-body">
+								<div id="pdf-container"></div> <!--contrainer for view pdf -->
+							</div>
+							<!-- /#modal-body -->
+					 	</div>
+					  	<!-- /#modal-content -->
 					</div>
 				</div>
 				<!-- /#Popup window -->
@@ -236,8 +246,16 @@
 
 		<!-- Custom Theme JavaScript -->
 		<script src="js/sb-admin-2.js"></script>
+			
+		<!-- PDFObject JavaScript -->
+		<script src="js/pdfobject.min.js"></script>
 
 		<script src="js/customJS.js"></script>
+			
+		<!-- PDFObject Location to Read and View PDF -->
+		<script>
+						PDFObject.embed("pdf/sample.pdf", "#pdf-container");
+		</script>
 
 	</body>
 

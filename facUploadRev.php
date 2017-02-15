@@ -1,7 +1,12 @@
 <?php
 if(isset($_POST['btnSubmit'])){
+<<<<<<< HEAD
   include ("configtest.php");
   $upload_dir = "FileUploadRev/";
+=======
+  include 'configtest.php';
+  $upload_dir = "testUploads/";
+>>>>>>> origin/master
   $upload_loc = $_FILES['fileToUpload']['tmp_name'];
   $upload_file = rand(1000,100000)."-".$_FILES['fileToUpload']['name'];
   $upload_size = $_FILES['fileToUpload']['size'];
