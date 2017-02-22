@@ -24,16 +24,6 @@
 				background:none !important;
 				background-color: #fff !important;
 			}
-			.container-pdf * > .modal-body{
-				width:100%;
-				height: calc(100vh - 125px);
-
-			}
-
-			.pdfobject-container{
-				width:100%;
-				height: calc(100vh - 155px);
-			}
 		</style>
 
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -174,11 +164,7 @@
     										<tr>
     											<td id="code"><?php echo $othercourses->CourseCode;?></td>
     											<td id="desc"><?php echo $othercourses->CourseName;?></td>
-    											<td><a onclick="showWLAPList2()">View list</a>
-												<!-- Link for View PDF -->
-												<a data-backdrop="static" data-toggle="modal"  data-target="#pdf_modal">View PDF</a>
-											
-											</td>
+    											<td><a onclick="showWLAPList2()">View list</a></td>
     										</tr>
                              <?php } ?>
 											</tbody>
@@ -209,7 +195,7 @@
 										</a>
 										<ul class="dropdown-menu">
 											<li><a onclick="" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-											<li><a data-toggle="modal" data-target="#modal_upload"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
+											<li><a onclick="" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
 											<li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
 										</ul>
 									</span>
@@ -252,84 +238,19 @@
 				</div>
 				<!-- /.row -->
 
-        <!-- Popup for upload -->
-<<<<<<< HEAD
-                <div class="modal fade" id="modal_upload" role="dialog">
-                  <div class="modal-dialog">
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      <h4 class="modal-title">COE 002A - Week 1 Remarks</h4>
-                    </div>
-                    <div class="modal-body" style="height: 350px;"><br>
-                      <div class="form-group">
-                      <?php
-                      include_once "facUploadRev.php"; ?>
-                      </div>
-                      <?php
-                    date_default_timezone_set('asia/manila');
-                    $date=date('d-m-Y');
-                    $time = date("h:i");
-                    ?>
-                      <span class="pull-left text-muted small" style="display:block;">
-                          Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
-                      </span>
-                    </div>
-                    <!-- /#modal-body -->
-                    </div>
-                    <!-- /#modal-content -->
-                  </div>
-                </div>
-                <!-- /#Popup window -->
-
-                
-=======
-        <div class="modal fade" id="modal_upload" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">COE 002A - Week 1 Remarks</h4>
-            </div>
-            <div class="modal-body" style="height: 350px;"><br>
-              <div class="form-group">
-              <?php
-              include_once "facUploadRev.php"; ?>
-              </div>
-              <?php
-            date_default_timezone_set('asia/manila');
-            $date=date('d-m-Y');
-            $time = date("h:i");
-            ?>
-              <span class="pull-left text-muted small" style="display:block;">
-                  Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
-              </span>
-            </div>
-            <!-- /#modal-body -->
-            </div>
-            <!-- /#modal-content -->
-          </div>
-        </div>
-        <!-- /#Popup window -->
-
->>>>>>> origin/master
 				<!-- Popup for remarks -->
-				<div class="container-pdf">
-					<div class="modal fade" id="modal_viewWLAP" role="dialog" data-backdrop="static">
-						<div class="modal-dialog modal-lg">
-						  <!-- Modal content-->
-							 <div class="modal-content">
-								<div class="modal-header">
-								  <button type="button" class="close" data-dismiss="modal">&times;</button>
-								  <h4 class="modal-title">COE 002A - Week 1</h4>
-								</div>
-								<div class="modal-body">
-									<div id="pdf-container"></div> <!--contrainer for view pdf -->
-								</div>
-							 </div>
+				<div class="modal fade" id="modal_viewWLAP" role="dialog">
+					<div class="modal-dialog">
+					  <!-- Modal content-->
+					  <div class="modal-content">
+						<div class="modal-header">
+						  <button type="button" class="close" data-dismiss="modal">&times;</button>
+						  <h4 class="modal-title">COE 002A - Week 1</h4>
 						</div>
+						<div class="modal-body">
+							...
+						</div>
+					  </div>
 					</div>
 				</div>
 				<!-- /#Popup window -->
@@ -385,7 +306,6 @@
 			<!--/#page-wrapper -->
 		</div>
 		<!-- /#wrapper -->
-		
 
 		 <!-- jQuery -->
 		<script src="js/jquery.min.js"></script>
@@ -398,15 +318,8 @@
 
 		<!-- Custom Theme JavaScript -->
 		<script src="js/sb-admin-2.js"></script>
-		<!-- PDFObject View PDF -->
-		<script src="js/pdfobject.min.js"></script>
 
 		<script src="js/customJS.js"></script>
-		
-		<!-- Link for View PDF with modal -->
-		<script>
-			PDFObject.embed("pdf/sample.pdf", "#pdf-container");
-		</script>
 
 	</body>
 
