@@ -158,7 +158,7 @@
 								<div class="tab-pane fade in active" id="profile">
 									<div class="row">
 										<div class="col-lg-6">
-											<a id="docPhoto"><img class="img-thumbnail" src="upload_pic/thumbnail_1485831187.jpg"></a>
+											<a id="docPhoto"><img class="img-thumbnail" src="img/black.png"></a>
 											<a href="facUpload.php" style="float:right;" id="changePhoto"><i class="fa fa-pencil fa-fw"></i> Change Photo</a>
 										</div>
 
@@ -188,7 +188,6 @@
 							require ("database.php");
 							$sql="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, account.Username FROM file INNER JOIN user on user.UserID = file.UserID INNER JOIN account on account.AccountID = user.AccountID WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (account.AccountID != '".$IaccountID."') ORDER BY file.DateUpload ASC  ";
 							$result1 = mysqli_query($conn,$sql);
-
 							 ?>
                <?php
              require ("database.php");
