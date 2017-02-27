@@ -136,7 +136,7 @@
     										<tr>
     											<td id="code"><?php echo $course->CourseCode;?></td>
     											<td id="desc"><?php echo $course->CourseName;?></td>
-    											<td><a onclick="showWLAPList()" href="adminWLAPcourses.php?id=<?php echo $course->CourseOrder;?>">View list</a></td>
+    											<td><a href="adminWLAPcourses.php?id=<?php echo $course->CourseOrder;?>">View list</a></td>
     										</tr>
                              <?php } ?>
 											</tbody>
@@ -182,13 +182,19 @@
 
 					<div class="col-lg-4">
 						<!-- WLAP List of My Courses -->
+          <?php
+          $courseorder=$_GET['id'];
+          require ("database.php");
+          $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
+          $result1 = mysqli_query($conn,$sql);
 
-            <div class="panel panel-green" style="display:none;" id="WLAPList">
-
+           ?>
+            <div class="panel panel-green" id="WLAPList">
+              <?php while ($course = mysqli_fetch_object($result1)){?>
               <div class="panel-heading" id="code">
-
+              <?php echo $course->CourseCode;?> WLAP List
               </div>
-
+              <?php } ?>
               <!-- /.panel-heading -->
 
               <div class="panel-body" style="overflow-y:auto; height:415px;">
@@ -211,7 +217,7 @@
 						<!-- /.panel -->
 
 						<!-- WLAP List of Other Courses -->
-						<div class="panel panel-green" style="display:none;" id="WLAPList2">
+						<div class="panel panel-green"  style="display:none;"  id="WLAPList2">
 							<div class="panel-heading" id="code">
 								CPE 501 WLAP List
 							</div>
@@ -324,7 +330,7 @@
 		<!-- Custom Theme JavaScript -->
 		<script src="js/sb-admin-2.js"></script>
 
-		<script src="js/customJS.js"></script>
+    <script src="js/customJS.js"></script>
 
 	</body>
 

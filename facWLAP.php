@@ -115,7 +115,7 @@
 								$t=date('d-m-Y');
 								$p=date("D",strtotime($t));
 								require ("database.php");
-								$sql="Select distinct c.CourseName,s.CourseCode from schedule s INNER JOIN course c ON c.CourseCode = s.CourseCode WHERE s.userID = '".$IuserID."' ORDER by c.CourseName ";
+								$sql="Select distinct c.CourseOrder,c.CourseName,s.CourseCode from schedule s INNER JOIN course c ON c.CourseCode = s.CourseCode WHERE s.userID = '".$IuserID."' ORDER by c.CourseName ";
 								$result1 = mysqli_query($conn,$sql);
 
 								 ?>
@@ -134,18 +134,18 @@
     										<tr>
     											<td id="code"><?php echo $course->CourseCode;?></td>
     											<td id="desc"><?php echo $course->CourseName;?></td>
-    											<td><a onclick="showWLAPList()">View list</a></td>
+    											<td><a onclick="showWLAPList()" href="facWLAPcourses.php?id=<?php echo $course->CourseOrder;?>">View list</a></td>
     										</tr>
                              <?php } ?>
 											</tbody>
 										</table>
 									</div>
-                  <?php
+									<?php
 
                   $t=date('d-m-Y');
                   $p=date("D",strtotime($t));
                   require ("database.php");
-                  $sql="Select distinct T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID is NULL ORDER by CourseName";
+                  $sql="Select distinct T.CourseOrder,T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseOrder,c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID is NULL ORDER by CourseName";
                   $result1 = mysqli_query($conn,$sql);
 
                    ?>
@@ -164,7 +164,7 @@
     										<tr>
     											<td id="code"><?php echo $othercourses->CourseCode;?></td>
     											<td id="desc"><?php echo $othercourses->CourseName;?></td>
-    											<td><a onclick="showWLAPList2()">View list</a></td>
+    											<td><a href="facWLAPothercourses.php?id=<?php echo $othercourses->CourseOrder;?>">View list</a></td>
     										</tr>
                              <?php } ?>
 											</tbody>
@@ -180,29 +180,32 @@
 
 					<div class="col-lg-4">
 						<!-- WLAP List of My Courses -->
-						<div class="panel panel-green" style="display:none;" id="WLAPList">
-							<div class="panel-heading" id="code">
-								COE 002A WLAP List
-							</div>
-							<!-- /.panel-heading -->
 
-							<div class="panel-body" style="overflow-y:auto; height:415px;">
-								<div class="list-group">
-									<span href="#" class="list-group-item">
-										<a data-toggle="modal" data-target="#modal_viewWLAP" id="week">Week 1</a>
-										<a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-											<i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
-										</a>
-										<ul class="dropdown-menu">
-											<li><a onclick="" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-											<li><a onclick="" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
-											<li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
-										</ul>
-									</span>
-								</div>
-							</div>
-							<!-- /.panel-body -->
-						</div>
+            <div class="panel panel-green" style="display:none;" id="WLAPList">
+
+              <div class="panel-heading" id="code">
+
+              </div>
+
+              <!-- /.panel-heading -->
+
+              <div class="panel-body" style="overflow-y:auto; height:415px;">
+                <div class="list-group">
+                  <span href="#" class="list-group-item">
+                    <a data-toggle="modal" data-target="#modal_viewWLAP" id="week">Week 1</a>
+                    <a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      <i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a onclick="" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
+                      <li><a onclick="" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
+                      <li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
+                    </ul>
+                  </span>
+                </div>
+              </div>
+              <!-- /.panel-body -->
+            </div>
 						<!-- /.panel -->
 
 						<!-- WLAP List of Other Courses -->

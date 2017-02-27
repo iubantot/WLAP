@@ -157,11 +157,17 @@
 							<div class="panel-body" style="overflow-x:auto; height:178px;">
 								<div class="tab-pane fade in active" id="profile">
 									<div class="row">
+                    <?php
+    							require ("database.php");
+    							$sql="SELECT ImageName from user where UserID = '".$IuserID."'";
+    							$picture = mysqli_query($conn,$sql);
+    							 ?>
 										<div class="col-lg-6">
-											<a id="docPhoto"><img class="img-thumbnail" src="img/black.png"></a>
+<?php while ($pictureofuser = mysqli_fetch_object($picture)){?>
+											<a id="docPhoto"><img class="img-thumbnail" src="<?php echo $pictureofuser->ImageName;?>"></a>
 											<a href="facUpload.php" style="float:right;" id="changePhoto"><i class="fa fa-pencil fa-fw"></i> Change Photo</a>
 										</div>
-
+  <?php } ?>
 										<div class="col-lg-6" id="viewProfile" style="margin-top: -20px;">
 											<form role="form"><br>
 												<h5 id="fullName"><?php echo  $vFirstName; ?> <?php echo  $vMiddleName; ?>. <?php echo  $vLastName; ?></h5>
@@ -186,12 +192,12 @@
 							<div class="panel-body" style="overflow-y:auto; height:176px;">
 								<?php
 							require ("database.php");
-							$sql="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, account.Username FROM file INNER JOIN user on user.UserID = file.UserID INNER JOIN account on account.AccountID = user.AccountID WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (account.AccountID != '".$IaccountID."') ORDER BY file.DateUpload ASC  ";
+							$sql="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (user.UserID != '".$IuserID."') ORDER BY file.DateUpload ASC  ";
 							$result1 = mysqli_query($conn,$sql);
 							 ?>
                <?php
              require ("database.php");
-             $sql1="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, account.Username, account.accountID ,file.Status FROM file INNER JOIN user on user.UserID = file.UserID INNER JOIN account on account.AccountID = user.AccountID WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (account.AccountID = '".$IaccountID."') ORDER BY file.DateUpload ASC  ";
+             $sql1="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, user.Username, user.userID ,file.Status FROM file INNER JOIN user on user.UserID = file.UserID  WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (user.UserID = '".$IuserID."') ORDER BY file.DateUpload ASC  ";
              $result2 = mysqli_query($conn,$sql1);
 
               ?>

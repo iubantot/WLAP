@@ -36,7 +36,7 @@ $thumb_image_prefix = "thumbnail_";			// The prefix name to the thumb image
 $large_image_name = $large_image_prefix.$_SESSION['random_key'];     // New name of the large image (append the timestamp to the filename)
 $thumb_image_name = $thumb_image_prefix.$_SESSION['random_key'];     // New name of the thumbnail image (append the timestamp to the filename)
 $max_file = "3"; 							// Maximum file size in MB
-$max_width = "200";	
+$max_width = "200";
 $max_height = "200";						// Max width allowed for the large image
 $thumb_width = "200";						// Width of thumbnail image
 $thumb_height = "200";						// Height of thumbnail image
@@ -170,7 +170,8 @@ if (file_exists($large_image_location)){
 
     echo $thumb_image_location;
     require("database.php");
-    $sql = "INSERT INTO uploads (imagename) VALUES ('$thumb_image_location')";
+    require("session.php");
+    $sql = "UPDATE  user SET  ImageName = '".$thumb_image_location."' WHERE UserID = '".$IuserID."'";
       $query = mysqli_query($conn,$sql);
       if($query){
         echo "<script>
@@ -389,15 +390,15 @@ if(strlen($large_photo_exists)>0 && strlen($thumb_photo_exists)>0){
 		if(strlen($large_photo_exists)>0){?>
 		<h2>Create Thumbnail</h2>
 		<div align="center">
-	
+
 			<img src="<?php echo $upload_path.$large_image_name.$_SESSION['user_file_ext'];?>" style="float: left; margin-right: 10px;" id="thumbnail" alt="Create Thumbnail" />
-			
+
 			<div style="border:1px #e5e5e5 solid; float:left; position:relative; overflow:hidden; width:<?php echo $thumb_width;?>px; height:<?php echo $thumb_height;?>px;">
-				
+
 				<img src="<?php echo $upload_path.$large_image_name.$_SESSION['user_file_ext'];?>" style="position: relative;" alt="Thumbnail Preview" />
-				
+
 			</div>
-			
+
 			<form name="thumbnail" action="<?php echo $_SERVER["PHP_SELF"];?>"  method="post">
 				<div class="col-sm-4">
 				<input type="hidden" name="x1" value="" id="x1" />
@@ -406,7 +407,7 @@ if(strlen($large_photo_exists)>0 && strlen($thumb_photo_exists)>0){
 				<input type="hidden" name="y2" value="" id="y2" />
 				<input type="hidden" name="w" value="" id="w" />
 				<input type="hidden" name="h" value="" id="h" />
-				
+
 				<input type="submit"class="btn btn-success"  name="upload_thumbnail" value="Save Thumbnail" id="save_thumb" />
 				</div>
 			</form>

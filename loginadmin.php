@@ -14,14 +14,14 @@
             $Vusername=$_POST['Username'];
             $Vpassword=$_POST['Password'];
             // SQL query to fetch information of registerd users and finds user match.
-            $sql="SELECT count(*) AS Total FROM account WHERE Username = '".$Vusername."' AND Password = '".$Vpassword."'AND TypeofUserNum = 2";
+            $sql="SELECT count(*) AS Total FROM user WHERE Username = '".$Vusername."' AND Password = '".$Vpassword."'AND TypeofUserNum = 2";
             $res = mysqli_query($conn,$sql);
             while ($userdata = mysqli_fetch_array($res)) {
                 $total = $userdata['Total'];
 
             }
             if ($total == 1) {
-                $_SESSION['login_user']=$Vusername; // Initializing Session
+                $_SESSION['login_admin']=$Vusername; // Initializing Session
                 echo    "<script>
                             alert('Access Granted!');
                             window.location.href='sessionadmin.php';

@@ -24,3 +24,9 @@ function hidePhotoInput() {
 	document.getElementById('submit').style.display = "none";
 	document.getElementById('can').style.display = "none";
 }
+
+/* Show Faculty Schedule */
+function showFacSchedule() {
+	document.getElementById('facSched').style.display = "none";
+	document.getElementById('facSched').style.display = "block";
+}

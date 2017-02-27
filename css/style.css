@@ -1,7 +1,7 @@
 @font-face {
     font-family: Arial Rounded MT Bold;
     src: url('../fonts/ARLRDBD.ttf');
-}
+} 
 
 body {
 	font-family: "Arial Rounded MT Bold";
@@ -68,7 +68,7 @@ img {
 	color: #00cc66;
 	background: #fff;
 	border: 1px solid #bfbfbf;
-}
+}	
 
 .box {
 	height: 350px;
@@ -86,7 +86,7 @@ img {
 .panel-footer {
   background-color: transparent;
   height: 400px;
-  overflow: -moz-scrollbars-vertical;
+  overflow: -moz-scrollbars-vertical; 
   overflow-y: scroll;"
 }
 
@@ -130,7 +130,7 @@ img {
 .modal-body {
 	height: 550px;
 	width: 600px;
-    overflow: -moz-scrollbars-vertical;
+    overflow: -moz-scrollbars-vertical; 
     overflow-y: auto;"
 }
 .navbar-brand {
@@ -213,5 +213,5 @@ img {
 	height: 50px;
 }
 .carousel-control {
-								background:none !important;
-							}
+	background:none !important;
+}

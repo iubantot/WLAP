@@ -62,13 +62,13 @@
 								<a href="adminHome.php"><i class="fa fa-3x fa-home fa-fw"></i><br>Home</a>
 							</li>
 							<li>
-								<a href="#"><i class="fa fa-3x fa-calendar-o fa-fw"></i><br>WLAP</a>
+								<a href="adminWLAP.php"><i class="fa fa-3x fa-calendar-o fa-fw"></i><br>WLAP</a>
 							</li>
 							<li>
 								<a href="adminSyllabus.php"><i class="fa fa-3x fa-file-text-o fa-fw"></i><br>Syllabus</a>
 							</li>
 							<li>
-								<a href="adminFacultyMgmt.html"><i class="fa fa-3x fa-id-card-o fa-fw"></i><br>Faculty</a>
+								<a href="adminFacultyMgmt.php"><i class="fa fa-3x fa-id-card-o fa-fw"></i><br>Faculty</a>
 							</li>
 							<li>
 								<a href="adminlogout.php"><i class="fa fa-3x fa-sign-out fa-fw"></i><br>Logout</a>
@@ -173,7 +173,7 @@
 														<a data-toggle="modal" data-target="#modal_viewSyllabus" id="down"><?php echo $othercourses->CourseName;?></a>
 													</td>
 													<td>
-                            	<a href="">Download</a> | <a href="docViewRecord.php?id=<?php echo $patient->PatientID;?>">Upload</a>
+                            	<a href="">Download</a> | <a href="">Upload</a>
 													</td>
 												</tr>
                          <?php } ?>

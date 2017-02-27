@@ -14,7 +14,7 @@
             $Vusername=$_POST['Username'];
             $Vpassword=$_POST['Password'];
             // SQL query to fetch information of registerd users and finds user match.
-            $sql="SELECT count(*) AS Total,TypeofUserNum  FROM account WHERE Username = '".$Vusername."' AND Password = '".$Vpassword."'";
+            $sql="SELECT count(*) AS Total,TypeofUserNum  FROM user WHERE Username = '".$Vusername."' AND Password = '".$Vpassword."'AND TypeofUserNum = 1";
             $res = mysqli_query($conn,$sql);
             while ($userdata = mysqli_fetch_array($res)) {
                 $total = $userdata['Total'];

@@ -68,7 +68,7 @@
 								<a href="adminSyllabus.php"><i class="fa fa-3x fa-file-text-o fa-fw"></i><br>Syllabus</a>
 							</li>
 							<li>
-								<a href="#"><i class="fa fa-3x fa-id-card-o fa-fw"></i><br>Faculty</a>
+								<a href="adminFacultyMgmt.php"><i class="fa fa-3x fa-id-card-o fa-fw"></i><br>Faculty</a>
 							</li>
 							<li>
 								<a href="adminlogout.php"><i class="fa fa-3x fa-sign-out fa-fw"></i><br>Logout</a>
@@ -188,7 +188,7 @@
 							<div class="panel-body" style="overflow-y:auto; height:176px;">
                 <?php
 							require ("database.php");
-							$sql="SELECT file.FileID,file.CourseCode,file.DateUpload, file.TimeUpload, account.Username FROM file INNER JOIN user on user.UserID = file.UserID INNER JOIN account on account.AccountID = user.AccountID WHERE file.Status = 'For Review' ORDER BY file.DateUpload ASC  ";
+							$sql="SELECT file.FileID,file.CourseCode,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE file.Status = 'For Review' ORDER BY file.DateUpload ASC  ";
 							$result1 = mysqli_query($conn,$sql);
 
 							 ?>
@@ -267,7 +267,7 @@
 						<div class="modal-body" style="width:500px;">
               <?php
             require ("database.php");
-            $sql="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, account.Username FROM file INNER JOIN user on user.UserID = file.UserID INNER JOIN account on account.AccountID = user.AccountID WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND file.Status = 'For Review' ORDER BY file.DateUpload ASC";
+            $sql="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND file.Status = 'For Review' ORDER BY file.DateUpload ASC";
             $result1 = mysqli_query($conn,$sql);
 
              ?>
