@@ -275,7 +275,7 @@
 						  <h4 class="modal-title"><?php echo $course->CourseCode ?> - Week 1</h4>
 						</div>
 						<div class="modal-body">
-							...
+							<div id="pdf-container"></div>
 						</div>
 						<?php }?>
 					  </div>
@@ -353,9 +353,17 @@
 
 		<script src="js/customJS.js"></script>
 			
-		<!-- PDFObject Location to Read and View PDF -->
+		<?php
+		          $courseorder=$_GET['id'];
+		          require ("database.php");
+		          $sql="Select FileName from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."'";
+		          $result3 = mysqli_query($conn,$sql);
+        ?>
+
 		<script>
-						PDFObject.embed("pdf/sample.pdf", "#pdf-container");
+		<?php while ($file = mysqli_fetch_object($result3)){?>
+						PDFObject.embed(<?php echo "\"pdf/"; echo $file->FileName ; echo ".pdf\"";?>, "#pdf-container");
+		<?php }?>
 		</script>
 
 	</body>
