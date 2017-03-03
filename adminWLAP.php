@@ -2,7 +2,7 @@
 
 
     require("database.php");
-    require("session.php");
+    require("sessionadmin.php");
 
 ?>
 
@@ -59,13 +59,13 @@
 					<div class="sidebar-nav navbar-collapse text-center">
 						<ul class="nav" id="side-menu">
 							<li>
-								<a href="facHome.php"><i class="fa fa-3x fa-home fa-fw"></i><br>Home</a>
+								<a href="adminHome.php"><i class="fa fa-3x fa-home fa-fw"></i><br>Home</a>
 							</li>
 							<li>
 								<a href="#"><i class="fa fa-3x fa-calendar-o fa-fw"></i><br>WLAP</a>
 							</li>
 							<li>
-								<a href="facSyllabus.php"><i class="fa fa-3x fa-file-text-o fa-fw"></i><br>Syllabus</a>
+								<a href="adminSyllabus.php"><i class="fa fa-3x fa-file-text-o fa-fw"></i><br>Syllabus</a>
 							</li>
               <li>
 								<a href="adminFacultyMgmt.php"><i class="fa fa-3x fa-id-card-o fa-fw"></i><br>Faculty</a>
