@@ -24,6 +24,15 @@
 				background:none !important;
 				background-color: #fff !important;
 			}
+			.container-pdf * > .modal-body{
+				width:100%;
+				height: calc(100vh - 125px);
+
+			}
+			.pdfobject-container{
+				width:100%;
+				height: calc(100vh - 155px);
+			}
 		</style>
 
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -322,7 +331,15 @@
 		<!-- Custom Theme JavaScript -->
 		<script src="js/sb-admin-2.js"></script>
 
+		<!-- PDFObject JavaScript -->
+		<script src="js/pdfobject.min.js"></script>
+
 		<script src="js/customJS.js"></script>
+			
+		<!-- PDFObject Location to Read and View PDF -->
+		<script>
+						PDFObject.embed("pdf/sample.pdf", "#pdf-container");
+		</script>
 
 	</body>
 

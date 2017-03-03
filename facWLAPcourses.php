@@ -24,6 +24,15 @@
 				background:none !important;
 				background-color: #fff !important;
 			}
+			.container-pdf * > .modal-body{
+				width:100%;
+				height: calc(100vh - 125px);
+
+			}
+			.pdfobject-container{
+				width:100%;
+				height: calc(100vh - 155px);
+			}
 		</style>
 
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -246,22 +255,33 @@
 
 				</div>
 				<!-- /.row -->
+			<?php
+		          $courseorder=$_GET['id'];
+		          require ("database.php");
+		          $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
+		          $result2 = mysqli_query($conn,$sql);
+         	  ?>
+
 
 				<!-- Popup for remarks -->
+			<div class="container-pdf">
 				<div class="modal fade" id="modal_viewWLAP" role="dialog">
-					<div class="modal-dialog">
+					<div class="modal-dialog modal-lg">
 					  <!-- Modal content-->
 					  <div class="modal-content">
 						<div class="modal-header">
+						<?php while ($course = mysqli_fetch_object($result2)){?>
 						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-						  <h4 class="modal-title">COE 002A - Week 1</h4>
+						  <h4 class="modal-title"><?php echo $course->CourseCode ?>- Week 1</h4>
 						</div>
 						<div class="modal-body">
 							...
 						</div>
+						<?php }?>
 					  </div>
 					</div>
 				</div>
+			</div>
 				<!-- /#Popup window -->
 
 				<!-- Popup view of WLAP -->
@@ -328,7 +348,15 @@
 		<!-- Custom Theme JavaScript -->
 		<script src="js/sb-admin-2.js"></script>
 
-    <script src="js/customJS.js"></script>
+    	<!-- PDFObject JavaScript -->
+		<script src="js/pdfobject.min.js"></script>
+
+		<script src="js/customJS.js"></script>
+			
+		<!-- PDFObject Location to Read and View PDF -->
+		<script>
+						PDFObject.embed("pdf/sample.pdf", "#pdf-container");
+		</script>
 
 	</body>
 
