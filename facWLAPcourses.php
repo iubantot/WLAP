@@ -194,6 +194,8 @@
           require ("database.php");
           $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
           $result1 = mysqli_query($conn,$sql);
+          $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
+          $result5 = mysqli_query($conn,$sql);
 
            ?>
             <div class="panel panel-green" id="WLAPList">
@@ -207,7 +209,7 @@
               <div class="panel-body" style="overflow-y:auto; height:415px;">
                 <div class="list-group">
                   <span href="#" class="list-group-item">
-                    <a data-toggle="modal" data-target="#modal_viewWLAP" id="week">Week 1</a>
+                    <a data-toggle="modal" data-target="#modal_viewWLAP" id="week" href="">Week 1</a>
                     <a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                       <i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
                     </a>
@@ -364,7 +366,7 @@
 
 		<script>
 		<?php while ($file = mysqli_fetch_object($result3)){?>
-						PDFObject.embed(<?php echo "\"pdf/"; echo $file->FileName ; echo ".pdf\"";?>, "#pdf-container");
+						PDFObject.embed(<?php echo "\"pdf/WLAP/"; echo $file->FileName ; echo ".pdf\"";?>, "#pdf-container");
 		<?php }?>
 		</script>
 

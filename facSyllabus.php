@@ -204,12 +204,14 @@
 						  <!-- Modal content-->
 						  <div class="modal-content">
 							<div class="modal-header">
+							<?php while ($course = mysqli_fetch_object($result1)){?>
 							  <button type="button" class="close" data-dismiss="modal">&times;</button>
-							  <h4 class="modal-title">CPE 501 - Syllabus</h4>
+							  <h4 class="modal-title"><?php echo $course->CourseCode ?> - Syllabus</h4>
 							</div>
 							<div class="modal-body">
 								<div id="pdf-container"></div> <!--contrainer for view pdf -->
 							</div>
+							<?php }?>
 							<!-- /#modal-body -->
 					 	</div>
 					  	<!-- /#modal-content -->
