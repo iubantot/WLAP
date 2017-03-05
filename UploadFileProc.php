@@ -1,14 +1,9 @@
 <?php
-if(isset($_POST['btnSubmit'])){
-<<<<<<< HEAD
+if(isset($_POST['submitbtn'])){
   include ("configtest.php");
-  $upload_dir = "FileUploadRev/";
-=======
-  include 'configtest.php';
-  $upload_dir = "testUploads/";
->>>>>>> origin/master
+  $upload_dir = "UploadedFile/";
   $upload_loc = $_FILES['fileToUpload']['tmp_name'];
-  $upload_file = rand(1000,100000)."-".$_FILES['fileToUpload']['name'];
+  $upload_file = rand(1000,100000)."-".$_FILES['file']['name'];
   $upload_size = $_FILES['fileToUpload']['size'];
   $fileType = pathinfo($upload_file,PATHINFO_EXTENSION);
   //to check if the file is a word document/pdf document
@@ -25,9 +20,9 @@ if(isset($_POST['btnSubmit'])){
     $new_file_name = strtolower($upload_file);
     $final_file=str_replace(' ','-',$new_file_name);
 
-    if(move_uploaded_file($upload_loc,$upload_dir.$final_file))
+    if(move_uploaded_file($file_loc,$folder.$final_file))
     {
-     $sql="INSERT INTO file_upload(name,type,size) VALUES('$final_file','$fileType','$new_size')";
+     $sql="INSERT INTO file(FileType, FileName, FileSize) VALUES('$fileType', '$final_file', '$new_size')";
      mysql_query($sql);
      ?>
      <script>
@@ -48,14 +43,3 @@ if(isset($_POST['btnSubmit'])){
    }
  }
 ?>
-
-<!DOCTYPE html>
-<html>
-  <body>
-    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" enctype="multipart/form-data">
-      <h3>Upload a revision of file</h3>
-      <input type="file" name="fileToUpload" />
-      <button type="submit" name="btnSubmit">Upload</button>
-    </form>
-</body>
-</html>

@@ -212,8 +212,15 @@
                       <i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
                     </a>
                     <ul class="dropdown-menu">
-                      <li><a onclick="" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-                      <li><a onclick="" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
+                      <?php
+                      $courseorder=$_GET['id'];
+                      require ("database.php");
+                      $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
+                      $result1 = mysqli_query($conn,$sql);
+                      while ($course = mysqli_fetch_object($result1)){?>
+                      <li><a href="UploadedFile/<?php echo $course->CourseCode; ?>" target="_blank" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
+                      <?php } ?>
+                      <li><a data-toggle="modal" data-target="#modal_upload" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
                       <li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
                     </ul>
                   </span>
@@ -284,14 +291,24 @@
 			</div>
 				<!-- /#Popup window -->
 
+        <?php
+              $courseorder=$_GET['id'];
+              require ("database.php");
+              $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
+              $result2 = mysqli_query($conn,$sql);
+            ?>
+
 				<!-- Popup view of WLAP -->
 				<div class="modal fade" id="modal_remarks" role="dialog">
 					<div class="modal-dialog">
 					  <!-- Modal content-->
 					  <div class="modal-content">
 						<div class="modal-header">
-						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-						  <h4 class="modal-title">COE 002A - Week 1 Remars</h4>
+              <?php
+              while ($course = mysqli_fetch_object($result2)){?>
+  						  <button type="button" class="close" data-dismiss="modal">&times;</button>
+  						  <h4 class="modal-title"><?php echo $course->CourseCode; ?>- Week 1 Remarks</h4>
+              <?php }?>
 						</div>
 						<div class="modal-body" style="height: 350px;"><br>
 							<div class="form-group">
@@ -300,7 +317,7 @@
 							</div>
 
 							<span class="pull-right" style="margin-top:-20px;">
-								<button href="facHome..php" class="btn btn-sub"><b>Submit</b></button>
+								<button href="facHome.php" class="btn btn-sub"><b>Submit</b></button>
 							</span>
 							<?php
 						date_default_timezone_set('asia/manila');
@@ -317,6 +334,48 @@
 					</div>
 				</div>
 				<!-- /#Popup window -->
+
+        <?php
+        $courseorder=$_GET['id'];
+        require ("database.php");
+        $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
+        $result2 = mysqli_query($conn,$sql);
+         ?>
+
+          <!-- Popup view of Upload -->
+          <div class="modal fade" id="modal_upload" role="dialog">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+              <div class="modal-header">
+                <?php
+                $courseorder=$_GET['id'];
+                while ($course = mysqli_fetch_object($result2)){?>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title"><?php echo $course->CourseCode ?>- Upload File</h4>
+              </div>
+              <div class="modal-body" style="height: 350px;"><br>
+                  <form action="UploadFileProc.php" method="post" enctype="multipart/form-data">
+                    <h3>Upload a revision of file</h3>
+                    <input type="file" name="fileToUpload" />
+                    <button type="submit" name="submitbtn">Upload</button>
+                  </form>
+                  <p>The file will be renamed as <?php echo $course->CourseCode; ?>.pdf/doc</p>
+                  <?php }
+                  date_default_timezone_set('asia/manila');
+                  $date=date('d-m-Y');
+                  $time = date("h:i");
+                  ?>
+                  <span class="pull-left text-muted small" style="display:block;">
+                      Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
+                  </span>
+              </div>
+              <!-- /#modal-body -->
+              </div>
+              <!-- /#modal-content -->
+            </div>
+            <div>
+          <!-- /#Popup window -->
 
 				<!-- Footer -->
 				<footer class="text-center">
@@ -352,7 +411,7 @@
 		<script src="js/pdfobject.min.js"></script>
 
 		<script src="js/customJS.js"></script>
-			
+
 		<?php
 		          $courseorder=$_GET['id'];
 		          require ("database.php");
