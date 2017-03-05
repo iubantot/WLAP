@@ -216,9 +216,9 @@
                       $courseorder=$_GET['id'];
                       require ("database.php");
                       $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
-                      $result1 = mysqli_query($conn,$sql);
-                      while ($course = mysqli_fetch_object($result1)){?>
-                      <li><a href="UploadedFile/<?php echo $course->CourseCode; ?>" target="_blank" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
+                      $result2 = mysqli_query($conn,$sql);
+                      while ($course = mysqli_fetch_object($result2)){?>
+                        <li><a href="DownloadFile.php?down=<?php echo $course->CourseCode?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
                       <?php } ?>
                       <li><a data-toggle="modal" data-target="#modal_upload" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
                       <li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>

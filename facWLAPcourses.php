@@ -215,14 +215,14 @@
                       <i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
                     </a>
                     <ul class="dropdown-menu">
-                      <?php
-                      $courseorder=$_GET['id'];
-                      require ("database.php");
-                      $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
-                      $result1 = mysqli_query($conn,$sql);
-                      while ($course = mysqli_fetch_object($result1)){?>
-                      <li><a href="UploadedFile/<?php echo $course->CourseCode; ?>" target="_blank" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-                      <?php } ?>
+                    <?php
+                    $courseorder=$_GET['id'];
+                    require ("database.php");
+                    $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
+                    $result2 = mysqli_query($conn,$sql);
+                    while ($course = mysqli_fetch_object($result2)){?>
+                      <li><a href="DownloadFile.php?down=<?php echo $course->CourseCode?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
+                    <?php } ?>
                       <li><a data-toggle="modal" data-target="#modal_upload" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
                       <li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
                     </ul>
@@ -355,18 +355,19 @@
               <div class="modal-content">
               <div class="modal-header">
                 <?php
-                $courseorder=$_GET['id'];
-                while ($course = mysqli_fetch_object($result2)){?>
+                while ($course = mysqli_fetch_object($result2)){
+                  $my_var = $course->CourseCode; ?>
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title"><?php echo $course->CourseCode ?>- Upload File</h4>
+                  <h4 class="modal-title"><?php echo $my_var; ?>- Upload File</h4>
               </div>
               <div class="modal-body" style="height: 350px;"><br>
-                  <form action="UploadFileProc.php" method="post" enctype="multipart/form-data">
+                  <form action="UploadFileProc.php?id=<?php echo $my_var; ?>" method="post" enctype="multipart/form-data">
                     <h3>Upload a revision of file</h3>
                     <input type="file" name="fileToUpload" />
                     <button type="submit" name="submitbtn">Upload</button>
                   </form>
-                  <p>The file will be renamed as <?php echo $course->CourseCode; ?>.pdf/doc</p>
+                  <p>The format of the file should be pdf.</p>
+                  <p>The file will be renamed as <?php echo $my_var; ?>.pdf</p>
                   <?php }
                   date_default_timezone_set('asia/manila');
                   $date=date('d-m-Y');
