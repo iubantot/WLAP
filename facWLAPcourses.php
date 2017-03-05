@@ -188,12 +188,14 @@
 					<!-- /.col-lg-6 -->
 
 					<div class="col-lg-4">
-						<!-- WLAP List of My Courses -->
+<!-- WLAP List of My Courses -->
           <?php
           $courseorder=$_GET['id'];
           require ("database.php");
           $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
           $result1 = mysqli_query($conn,$sql);
+          $sql="Select Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."'";
+          $result5 = mysqli_query($conn,$sql);
 
            ?>
             <div class="panel panel-green" id="WLAPList">
@@ -206,8 +208,9 @@
 
               <div class="panel-body" style="overflow-y:auto; height:415px;">
                 <div class="list-group">
+                <?php while ($weeks = mysqli_fetch_object($result5)){ ?>
                   <span href="#" class="list-group-item">
-                    <a data-toggle="modal" data-target="#modal_viewWLAP" id="week">Week 1</a>
+                    <a data-toggle="modal" data-target="#modal_viewWLAP<?php echo $weeks->Week_num_for_WLAP;?>" id="week" href="">Week <?php echo $weeks->Week_num_for_WLAP;?></a>
                     <a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                       <i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
                     </a>
@@ -224,6 +227,7 @@
                       <li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
                     </ul>
                   </span>
+                 <?php } ?>
                 </div>
               </div>
               <!-- /.panel-body -->
@@ -265,30 +269,33 @@
 			<?php
 		          $courseorder=$_GET['id'];
 		          require ("database.php");
-		          $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
+		          $sql="Select file.CourseCode, file.Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE CourseOrder = '".$courseorder."'";
 		          $result2 = mysqli_query($conn,$sql);
          	  ?>
 
-
 				<!-- Popup for remarks -->
+		
 			<div class="container-pdf">
-				<div class="modal fade" id="modal_viewWLAP" role="dialog">
+	<?php while ($course = mysqli_fetch_object($result2)){?>
+				<div class="modal fade" id="modal_viewWLAP<?php echo $course->Week_num_for_WLAP;?>" role="dialog">
 					<div class="modal-dialog modal-lg">
 					  <!-- Modal content-->
 					  <div class="modal-content">
 						<div class="modal-header">
-						<?php while ($course = mysqli_fetch_object($result2)){?>
+						
 						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-						  <h4 class="modal-title"><?php echo $course->CourseCode ?>- Week 1</h4>
+						  <h4 class="modal-title"><?php echo $course->CourseCode ?>- Week <?php echo $course->Week_num_for_WLAP;?></h4>
 						</div>
 						<div class="modal-body">
-							<div id="pdf-container"></div>
+							<div id="pdf-container<?php echo $course->Week_num_for_WLAP;?>"></div>
 						</div>
-						<?php }?>
+						
 					  </div>
 					</div>
 				</div>
+				<?php }?>
 			</div>
+
 				<!-- /#Popup window -->
 
           <?php
@@ -415,14 +422,15 @@
 
 		<?php
 		          $courseorder=$_GET['id'];
+		          
 		          require ("database.php");
-		          $sql="Select FileName from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."'";
+		          $sql="Select FileName, Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."'";
 		          $result3 = mysqli_query($conn,$sql);
         ?>
 
 		<script>
-		<?php while ($file = mysqli_fetch_object($result3)){?>
-						PDFObject.embed(<?php echo "\"pdf/"; echo $file->FileName ; echo ".pdf\"";?>, "#pdf-container");
+		<?php while ($pdf = mysqli_fetch_object($result3)){?>
+						PDFObject.embed(<?php echo "\"pdf/WLAP/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->Week_num_for_WLAP;?>");
 		<?php }?>
 		</script>
 
