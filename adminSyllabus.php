@@ -24,6 +24,15 @@
 				background:none !important;
 				background-color: #fff !important;
 			}
+			.container-pdf * > .modal-body{
+				width:100%;
+				height: calc(100vh - 125px);
+
+			}
+			.pdfobject-container{
+				width:100%;
+				height: calc(100vh - 155px);
+			}
 		</style>
 
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -132,11 +141,11 @@
 
 											<tbody style="width:80%; height:50%;">
 
-  												<?php while ($course = mysqli_fetch_object($result1)){?>
+  							<?php while ($course = mysqli_fetch_object($result1)){?>
 												<tr>
 													<td id="code"><?php echo $course->CourseCode;?></td>
 													<td id="desc">
-														<a data-toggle="modal" data-target="#modal_viewSyllabus" id="down"><?php echo $course->CourseName;?></a>
+														<a data-toggle="modal" data-target="#modal_viewSyllabus<?php echo $course->CourseCode ?>" id="down"><?php echo $course->CourseName;?></a>
 													</td>
 													<td>
 														<a onclick=""><i class="fa fa-download fa-fw"></i>Download</a>
@@ -170,7 +179,7 @@
 												<tr>
 													<td id="code"><?php echo $othercourses->CourseCode;?></td>
 													<td id="desc">
-														<a data-toggle="modal" data-target="#modal_viewSyllabus" id="down"><?php echo $othercourses->CourseName;?></a>
+														<a data-toggle="modal" data-target="#modal_viewSyllabus<?php echo $othercourses->CourseCode;?>" id="down"><?php echo $othercourses->CourseName;?></a>
 													</td>
 													<td>
                             	<a href="">Download</a> | <a href="">Upload</a>
@@ -190,23 +199,35 @@
 				</div>
 				<!-- /.row -->
 
+				<?php
+		          require ("database.php");
+		          $sql="Select CourseCode FROM file WHERE Week_num_for_WLAP=0 ";
+		          $result2 = mysqli_query($conn,$sql);
+         	  ?>
+
 				<!-- Popup view of Syllabus -->
-				<div class="modal fade" id="modal_viewSyllabus" role="dialog">
-					<div class="modal-dialog">
-					  <!-- Modal content-->
-					  <div class="modal-content">
-						<div class="modal-header">
-						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-						  <h4 class="modal-title">CPE 501 - Syllabus</h4>
-						</div>
-						<div class="modal-body">
-							...
-						</div>
-						<!-- /#modal-body -->
-					  </div>
-					  <!-- /#modal-content -->
+				<div class="container-pdf">
+		<?php while ($course = mysqli_fetch_object($result2)){?>
+					<div class="modal fade" id="modal_viewSyllabus<?php echo $course->CourseCode ?>" role="dialog">
+						<div class="modal-dialog modal-lg">
+						  <!-- Modal content-->
+						  <div class="modal-content">
+							<div class="modal-header">
+							
+							  <button type="button" class="close" data-dismiss="modal">&times;</button>
+							  <h4 class="modal-title"><?php echo $course->CourseCode ?> - Syllabus</h4>
+							</div>
+							<div class="modal-body">
+								<div id="pdf-container<?php echo $course->CourseCode?>"></div> <!--contrainer for view pdf -->
+							</div>
+							
+							<!-- /#modal-body -->
+					 	</div>
+					  	<!-- /#modal-content -->
 					</div>
 				</div>
+		<?php }?>
+			</div>
 				<!-- /#Popup window -->
 
 				<!-- Footer -->
@@ -239,7 +260,23 @@
 		<!-- Custom Theme JavaScript -->
 		<script src="js/sb-admin-2.js"></script>
 
+		<!-- PDFObject JavaScript -->
+		<script src="js/pdfobject.min.js"></script>
+
 		<script src="js/customJS.js"></script>
+			
+		<!-- PDFObject Location to Read and View PDF -->
+
+		<?php
+		          require ("database.php");
+		          $sql="Select FileName, CourseCode FROM file WHERE Week_num_for_WLAP=0 ";
+		          $result3 = mysqli_query($conn,$sql);
+        ?>
+		<script>
+		<?php while ($pdf = mysqli_fetch_object($result3)){?>
+						PDFObject.embed(<?php echo "\"pdf/Syllabus/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->CourseCode;?>");
+		<?php }?>
+		</script>
 
 	</body>
 
