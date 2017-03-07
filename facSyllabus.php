@@ -146,7 +146,7 @@
 														<a data-toggle="modal" data-target="#modal_viewSyllabus<?php echo $course->CourseCode ?>" id="down"><?php echo $course->CourseName;?></a>
 													</td>
 													<td>
-														<a onclick=""><i class="fa fa-download fa-fw"></i>Download</a>
+														<a href="DownloadFileSyllabus.php?down=<?php echo $course->CourseCode;?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a>
 													</td>
 												</tr>
                          <?php } ?>
@@ -180,7 +180,7 @@
 														<a data-toggle="modal" data-target="#modal_viewSyllabus<?php echo $othercourses->CourseCode;?>" id="down"><?php echo $othercourses->CourseName;?></a>
 													</td>
 													<td>
-														<a onclick=""><i class="fa fa-download fa-fw"></i>Download</a>
+														<a href="DownloadFileSyllabus.php?down=<?php echo $othercourses->CourseCode;?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a>
 													</td>
 												</tr>
                          <?php } ?>
@@ -211,14 +211,14 @@
 						  <!-- Modal content-->
 						  <div class="modal-content">
 							<div class="modal-header">
-							
+
 							  <button type="button" class="close" data-dismiss="modal">&times;</button>
 							  <h4 class="modal-title"><?php echo $course->CourseCode ?> - Syllabus</h4>
 							</div>
 							<div class="modal-body">
 								<div id="pdf-container<?php echo $course->CourseCode?>"></div> <!--contrainer for view pdf -->
 							</div>
-							
+
 							<!-- /#modal-body -->
 					 	</div>
 					  	<!-- /#modal-content -->
@@ -257,12 +257,12 @@
 
 		<!-- Custom Theme JavaScript -->
 		<script src="js/sb-admin-2.js"></script>
-			
+
 		<!-- PDFObject JavaScript -->
 		<script src="js/pdfobject.min.js"></script>
 
 		<script src="js/customJS.js"></script>
-			
+
 		<!-- PDFObject Location to Read and View PDF -->
 
 		<?php
@@ -276,6 +276,17 @@
 		<?php }?>
 		</script>
 
+		<!-- PDFObject Location to Read and View PDF -->
+    		<?php
+    		          require ("database.php");
+    		          $sql="Select FileName, CourseCode FROM file WHERE Week_num_for_WLAP=0 ";
+    		          $result3 = mysqli_query($conn,$sql);
+            ?>
+    <script>
+    <?php while ($pdf = mysqli_fetch_object($result3)){?>
+						PDFObject.embed(<?php echo "\"pdf/Syllabus/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->CourseCode;?>");
+		<?php }?>
+    </script>
 	</body>
 
 </html>

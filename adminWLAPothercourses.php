@@ -108,9 +108,9 @@
 							<div class="panel-body">
 								<!-- Nav tabs -->
 								<ul class="nav nav-tabs nav-justified">
-									<li ><a href="#mycourses" data-toggle="tab">My Courses</a>
+									<li class="active"><a href="#mycourses" data-toggle="tab">My Courses</a>
 									</li>
-									<li class="active"><a href="#other" data-toggle="tab">Other Courses</a>
+									<li><a href="#other" data-toggle="tab">Other Courses</a>
 									</li>
 								</ul>
 
@@ -129,8 +129,8 @@
 								$sql="Select distinct c.CourseOrder,c.CourseName,s.CourseCode from schedule s INNER JOIN course c ON c.CourseCode = s.CourseCode WHERE s.userID = '".$IuserID."' ORDER by c.CourseName ";
 								$result1 = mysqli_query($conn,$sql);
 
-								 ?>
-									<div class="tab-pane fade " id="mycourses">
+                 ?>
+									<div class="tab-pane fade in active" id="mycourses">
 										<table class="table table-scroll table-striped">
 											<thead>
 												<tr>
@@ -160,7 +160,7 @@
                   $result1 = mysqli_query($conn,$sql);
 
                    ?>
-									<div class="tab-pane fade in active" id="other">
+									<div class="tab-pane fade" id="other">
 										<table class="table table-scroll table-striped">
 											<thead>
 												<tr>
@@ -223,7 +223,7 @@
                       $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
                       $result2 = mysqli_query($conn,$sql);
                       while ($course = mysqli_fetch_object($result2)){?>
-                        <li><a href="DownloadFile.php?down=<?php echo $course->CourseCode?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
+                        <li><a href="DownloadFileAdminWLAP.php?down=<?php echo $course->CourseCode."- Week".$weeks->Week_num_for_WLAP;?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
                       <?php } ?>
                       <li><a data-toggle="modal" data-target="#modal_upload" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
                       <li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
@@ -234,7 +234,7 @@
               </div>
               <!-- /.panel-body -->
             </div>
-						<!-- /.panel -->
+            <!-- /.panel -->
 
 						<!-- WLAP List of Other Courses -->
 						<div class="panel panel-green"  style="display:none;"  id="WLAPList2">
@@ -353,6 +353,50 @@
 					</div>
 				</footer>
 
+        <?php
+        $courseorder=$_GET['id'];
+        require ("database.php");
+        $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
+        $result2 = mysqli_query($conn,$sql);
+         ?>
+
+          <!-- Popup view of Upload -->
+          <div class="modal fade" id="modal_upload" role="dialog">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+              <div class="modal-header">
+                <?php
+                $courseorder=$_GET['id'];
+                while ($course = mysqli_fetch_object($result2)){
+                  $file_var = $course->CourseCode;?>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title"><?php echo $file_var; ?>- Upload File</h4>
+              </div>
+              <div class="modal-body" style="height: 350px;"><br>
+                <form action="UploadFileProcAdminWLAP.php?id=<?php echo $file_var;?>&week=1" method="post" enctype="multipart/form-data">
+                  <h3>Upload a revision of file</h3>
+                  <input type="file" name="fileUpload" />
+                  <button type="submit" name="submitbtn">Upload</button>
+                </form>
+                <p>The format of the file should be pdf.</p>
+                <p>The file will be renamed as <?php echo $file_var."- Week1"?>.pdf</p>
+                <?php }
+                date_default_timezone_set('asia/manila');
+                $date=date('d-m-Y');
+                $time = date("h:i");
+                ?>
+                <span class="pull-left text-muted small" style="display:block;">
+                    Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
+                </span>
+            </div>
+            <!-- /#modal-body -->
+            </div>
+            <!-- /#modal-content -->
+          </div>
+          <div>
+        <!-- /#Popup window -->
+
 			</div>
 			<!--/#page-wrapper -->
 		</div>
@@ -370,7 +414,7 @@
 		<!-- Custom Theme JavaScript -->
 		<script src="js/sb-admin-2.js"></script>
 
-    	!-- PDFObject JavaScript -->
+    	<!-- PDFObject JavaScript -->
 		<script src="js/pdfobject.min.js"></script>
 
 		<script src="js/customJS.js"></script>

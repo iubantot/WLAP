@@ -121,14 +121,13 @@
 										</div>
 									</form>
                   <?php
-
 								$t=date('d-m-Y');
 								$p=date("D",strtotime($t));
 								require ("database.php");
 								$sql="Select distinct c.CourseName,s.CourseCode from schedule s INNER JOIN course c ON c.CourseCode = s.CourseCode WHERE s.userID = '".$IuserID."' ORDER by c.CourseName ";
 								$result1 = mysqli_query($conn,$sql);
 
-								 ?>
+                 ?>
 									<div class="tab-pane fade in active" id="mycourses">
 										<table class="table table-scroll table-striped">
 											<thead>
@@ -148,7 +147,7 @@
 														<a data-toggle="modal" data-target="#modal_viewSyllabus<?php echo $course->CourseCode ?>" id="down"><?php echo $course->CourseName;?></a>
 													</td>
 													<td>
-														<a onclick=""><i class="fa fa-download fa-fw"></i>Download</a>
+														<a href="DownloadFileAdminSylab.php?down=<?php echo $course->CourseCode; ?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a>
 													</td>
 												</tr>
                          <?php } ?>
@@ -156,13 +155,11 @@
 										</table>
 									</div>
                   <?php
-
                   $t=date('d-m-Y');
                   $p=date("D",strtotime($t));
                   require ("database.php");
                   $sql="Select distinct T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID is NULL ORDER by CourseName";
                   $result1 = mysqli_query($conn,$sql);
-
                    ?>
 									<div class="tab-pane fade" id="other">
 										<table class="table table-scroll table-striped">
@@ -182,10 +179,10 @@
 														<a data-toggle="modal" data-target="#modal_viewSyllabus<?php echo $othercourses->CourseCode;?>" id="down"><?php echo $othercourses->CourseName;?></a>
 													</td>
 													<td>
-                            	<a href="">Download</a> | <a href="">Upload</a>
+                            	<a href="DownloadFileAdminSylab.php?down=<?php echo $othercourses->CourseCode;?>.pdf" id="down">Download</a> | <a data-toggle="modal" data-target="#modal_upload" id="up">Upload</a>
 													</td>
 												</tr>
-                         <?php } ?>
+                        <?php } ?>
 											</tbody>
 										</table>
 									</div>
@@ -199,6 +196,35 @@
 				</div>
 				<!-- /.row -->
 
+        <?php
+         		          require ("database.php");
+         		          $sql="Select CourseCode FROM file WHERE Week_num_for_WLAP=0 ";
+        		          $result2 = mysqli_query($conn,$sql);
+                  	  ?>
+
+				<!-- Popup view of Syllabus -->
+        <div class="container-pdf">
+ 		<?php while ($course = mysqli_fetch_object($result2)){?>
+ 					<div class="modal fade" id="modal_viewSyllabus<?php echo $course->CourseCode ?>" role="dialog">
+ 						<div class="modal-dialog modal-lg">
+ 						  <!-- Modal content-->
+ 						  <div class="modal-content">
+ 							<div class="modal-header">
+
+ 							  <button type="button" class="close" data-dismiss="modal">&times;</button>
+ 							  <h4 class="modal-title"><?php echo $course->CourseCode ?> - Syllabus</h4>
+ 							</div>
+ 							<div class="modal-body">
+ 								<div id="pdf-container<?php echo $course->CourseCode?>"></div> <!--contrainer for view pdf -->
+ 							</div>
+
+ 							<!-- /#modal-body -->
+ 					 	</div>
+ 					  	<!-- /#modal-content -->
+					</div>
+        </div>
+          <?php }?>
+        </div>
 				<?php
 		          require ("database.php");
 		          $sql="Select CourseCode FROM file WHERE Week_num_for_WLAP=0 ";
@@ -213,14 +239,14 @@
 						  <!-- Modal content-->
 						  <div class="modal-content">
 							<div class="modal-header">
-							
+
 							  <button type="button" class="close" data-dismiss="modal">&times;</button>
 							  <h4 class="modal-title"><?php echo $course->CourseCode ?> - Syllabus</h4>
 							</div>
 							<div class="modal-body">
 								<div id="pdf-container<?php echo $course->CourseCode?>"></div> <!--contrainer for view pdf -->
 							</div>
-							
+
 							<!-- /#modal-body -->
 					 	</div>
 					  	<!-- /#modal-content -->
@@ -243,7 +269,7 @@
 					</div>
 				</footer>
 
-			</div>
+      </div>
 			<!--/#page-wrapper -->
 		</div>
 		<!-- /#wrapper -->
@@ -264,7 +290,7 @@
 		<script src="js/pdfobject.min.js"></script>
 
 		<script src="js/customJS.js"></script>
-			
+
 		<!-- PDFObject Location to Read and View PDF -->
 
 		<?php
@@ -277,6 +303,19 @@
 						PDFObject.embed(<?php echo "\"pdf/Syllabus/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->CourseCode;?>");
 		<?php }?>
 		</script>
+
+    <!-- PDFObject Location to Read and View PDF -->
+
+        <?php
+                  require ("database.php");
+                  $sql="Select FileName, CourseCode FROM file WHERE Week_num_for_WLAP=0 ";
+                  $result3 = mysqli_query($conn,$sql);
+             ?>
+        <script>
+        <?php while ($pdf = mysqli_fetch_object($result3)){?>
+                PDFObject.embed(<?php echo "\"pdf/Syllabus/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->CourseCode;?>");
+        <?php }?>
+        </script>
 
 	</body>
 

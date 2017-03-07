@@ -188,7 +188,7 @@
 					<!-- /.col-lg-6 -->
 
 					<div class="col-lg-4">
-<!-- WLAP List of My Courses -->
+            <!-- WLAP List of My Courses -->
           <?php
           $courseorder=$_GET['id'];
           require ("database.php");
@@ -220,8 +220,9 @@
                     require ("database.php");
                     $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
                     $result2 = mysqli_query($conn,$sql);
-                    while ($course = mysqli_fetch_object($result2)){?>
-                      <li><a href="DownloadFile.php?down=<?php echo $course->CourseCode?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
+                    while ($course = mysqli_fetch_object($result2)){
+                      $filename= $course->CourseCode;?>
+                      <li><a href="DownloadFileWLAP.php?down=<?php echo $filename."- Week".$weeks->Week_num_for_WLAP; ?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
                     <?php } ?>
                       <li><a data-toggle="modal" data-target="#modal_upload" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
                       <li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
@@ -274,7 +275,7 @@
          	  ?>
 
 				<!-- Popup for remarks -->
-		
+
 			<div class="container-pdf">
 	<?php while ($course = mysqli_fetch_object($result2)){?>
 				<div class="modal fade" id="modal_viewWLAP<?php echo $course->Week_num_for_WLAP;?>" role="dialog">
@@ -339,6 +340,20 @@
 				</div>
 				<!-- /#Popup window -->
 
+        <!-- Footer -->
+        <footer class="text-center">
+          <div class="footer-below">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-12" style="color:#666666;">
+                  Copyright &copy; WLAP and Syllabus Management System 2017
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
+
+
         <?php
         $courseorder=$_GET['id'];
         require ("database.php");
@@ -354,18 +369,18 @@
               <div class="modal-header">
                 <?php
                 while ($course = mysqli_fetch_object($result2)){
-                  $my_var = $course->CourseCode; ?>
+                  $file_var = $course->CourseCode;?>
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title"><?php echo $my_var; ?>- Upload File</h4>
+                  <h4 class="modal-title"><?php echo $file_var ?>- Upload File</h4>
               </div>
               <div class="modal-body" style="height: 350px;"><br>
-                  <form action="UploadFileProc.php?id=<?php echo $my_var; ?>" method="post" enctype="multipart/form-data">
+                  <form action="UploadFileProcWLAP.php?id=<?php echo $file_var."- Week1";?>.pdf" method="post" enctype="multipart/form-data">
                     <h3>Upload a revision of file</h3>
-                    <input type="file" name="fileToUpload" />
+                    <input type="file" name="fileUpload" />
                     <button type="submit" name="submitbtn">Upload</button>
                   </form>
                   <p>The format of the file should be pdf.</p>
-                  <p>The file will be renamed as <?php echo $my_var; ?>.pdf</p>
+                  <p>The file will be renamed as <?php echo $file_var."- Week1"?>.pdf</p>
                   <?php }
                   date_default_timezone_set('asia/manila');
                   $date=date('d-m-Y');
@@ -379,23 +394,8 @@
               </div>
               <!-- /#modal-content -->
             </div>
-            <div>
           <!-- /#Popup window -->
-
-				<!-- Footer -->
-				<footer class="text-center">
-					<div class="footer-below">
-						<div class="container">
-							<div class="row">
-								<div class="col-lg-12" style="color:#666666;">
-									Copyright &copy; WLAP and Syllabus Management System 2017
-								</div>
-							</div>
-						</div>
-					</div>
-				</footer>
-
-			</div>
+        </div>
 			<!--/#page-wrapper -->
 		</div>
 		<!-- /#wrapper -->
