@@ -194,7 +194,7 @@
           require ("database.php");
           $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
           $result1 = mysqli_query($conn,$sql);
-          $sql="Select Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."'";
+          $sql="Select Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
           $result5 = mysqli_query($conn,$sql);
 
            ?>
@@ -269,7 +269,7 @@
 			<?php
 		          $courseorder=$_GET['id'];
 		          require ("database.php");
-		          $sql="Select file.CourseCode, file.Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE CourseOrder = '".$courseorder."'";
+		          $sql="Select file.CourseCode, file.Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
 		          $result2 = mysqli_query($conn,$sql);
          	  ?>
 
@@ -282,14 +282,12 @@
 					  <!-- Modal content-->
 					  <div class="modal-content">
 						<div class="modal-header">
-						
 						  <button type="button" class="close" data-dismiss="modal">&times;</button>
 						  <h4 class="modal-title"><?php echo $course->CourseCode ?>- Week <?php echo $course->Week_num_for_WLAP;?></h4>
 						</div>
 						<div class="modal-body">
 							<div id="pdf-container<?php echo $course->Week_num_for_WLAP;?>"></div>
 						</div>
-						
 					  </div>
 					</div>
 				</div>
@@ -423,9 +421,8 @@
 
 		<?php
 		          $courseorder=$_GET['id'];
-		          
 		          require ("database.php");
-		          $sql="Select FileName, Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."'";
+		          $sql="Select FileName, Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
 		          $result3 = mysqli_query($conn,$sql);
         ?>
 
