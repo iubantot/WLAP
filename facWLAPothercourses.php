@@ -33,6 +33,18 @@
 				width:100%;
 				height: calc(100vh - 155px);
 			}
+
+            .btnPos {
+              padding-left: 100px;
+              padding-right: 100px;
+              padding-bottom: 20px;
+              text-align:center;
+            }
+            .inputFile {
+              position: absolute;
+              opacity: 0;
+            }
+
 		</style>
 
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -379,11 +391,27 @@
                   <h4 class="modal-title"><?php echo $file_var; ?>- Upload File</h4>
               </div>
               <div class="modal-body" style="height: 350px;"><br>
-                <form action="UploadFileProcWLAP.php?id=<?php echo $file_var."- Week1";?>.pdf" method="post" enctype="multipart/form-data">
-                  <h3>Upload a revision of file</h3>
-                  <input type="file" name="fileUpload" />
-                  <button type="submit" name="submitbtn">Upload</button>
-                </form>
+                  <form action="UploadFileProcWLAP.php?id=<?php echo $file_var."- Week1";?>.pdf" method="post" enctype="multipart/form-data">
+                    <h3>Upload a revision of file</h3>
+                    <div class="btnPos">
+                  <label class="btn btn-sub">
+                    <span id="input-value">Choose file</span>
+                    <input type="file" name="fileUpload" class="inputFile" id="inFile"/>
+                  </label>
+                  </div>
+                  <span class="pull-right" style="margin-top:-20px;">
+                  <button type="submit" name="submitbtn" class="btn btn-sub">Upload</button>
+                  </span>
+                  </form>
+                <script>
+                  document.getElementById('inFile').addEventListener('change', function(){
+                    myFunction();
+                  });
+                  function myFunction(){
+                      var inputVal = document.getElementById('inFile').value;
+                      document.getElementById('input-value').innerHTML=inputVal.substr(12);
+                  }
+                </script>
                 <p>The format of the file should be pdf.</p>
                 <p>The file will be renamed as <?php echo $file_var."- Week1"?>.pdf</p>
                 <?php }
