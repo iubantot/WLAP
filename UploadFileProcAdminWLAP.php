@@ -1,16 +1,17 @@
 <?php
   include ('configtest.php');
   $get_file_name = $_GET['id'];
+  $get_file_week = $_GET['week'];
   if(isset($_POST['submitbtn'])){
   $dir = "pdf_pend/";
-  $file_name = $dir.$get_file_name.".pdf";
+  $file_name = $dir.$get_file_name;
   $target_file = $dir . basename($_FILES["fileUpload"]["name"]);
   $file_type = pathinfo($target_file,PATHINFO_EXTENSION);
   $file_size = $_FILES["fileUpload"]["size"];
   $file_loc = $_FILES['fileUpload']['tmp_name'];
   $class = "WLAP";
-  $week = 1;
-  $stat = "pending";
+  $week = $get_file_week;
+  $stat = "Pending";
 
   if ($file_type != "pdf"){ ?> <!--To check the file extension-->
     <script>

@@ -206,7 +206,7 @@
           require ("database.php");
           $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
           $result1 = mysqli_query($conn,$sql);
-          $sql="Select Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
+          $sql="Select file.FileName, file.CourseCode, file.Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
           $result5 = mysqli_query($conn,$sql);
 
            ?>
@@ -227,16 +227,8 @@
                       <i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
                     </a>
                     <ul class="dropdown-menu">
-                    <?php
-                    $courseorder=$_GET['id'];
-                    require ("database.php");
-                    $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
-                    $result2 = mysqli_query($conn,$sql);
-                    while ($course = mysqli_fetch_object($result2)){
-                      $filename= $course->CourseCode;?>
-                      <li><a href="DownloadFileWLAP.php?down=<?php echo $filename."- Week".$weeks->Week_num_for_WLAP; ?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-                    <?php } ?>
-                      <li><a data-toggle="modal" data-target="#modal_upload" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
+                      <li><a href="DownloadFileWLAP.php?down=<?php echo $weeks->FileName; ?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
+                      <li><a data-toggle="modal" data-target="#modal_upload<?php echo $weeks->FileName;?>" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
                       <li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
                     </ul>
                   </span>
@@ -369,24 +361,22 @@
         <?php
         $courseorder=$_GET['id'];
         require ("database.php");
-        $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
-        $result2 = mysqli_query($conn,$sql);
-         ?>
+        $sql="Select file.FileName, file.CourseCode, file.Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
+        $result5 = mysqli_query($conn,$sql);
+        ?>
 
           <!-- Popup view of Upload -->
-          <div class="modal fade" id="modal_upload" role="dialog">
+          <?php while($file = mysqli_fetch_object($result5)){ ?>
+          <div class="modal fade" id="modal_upload<?php echo $file->FileName;?>" role="dialog">
             <div class="modal-dialog">
               <!-- Modal content-->
               <div class="modal-content">
               <div class="modal-header">
-                <?php
-                while ($course = mysqli_fetch_object($result2)){
-                  $file_var = $course->CourseCode;?>
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title"><?php echo $file_var ?>- Upload File</h4>
+                  <h4 class="modal-title"><?php echo $file->CourseCode; ?>- Upload File</h4>
               </div>
               <div class="modal-body" style="height: 350px;"><br>
-                  <form action="UploadFileProcWLAP.php?id=<?php echo $file_var."- Week1";?>.pdf" method="post" enctype="multipart/form-data">
+                  <form action="UploadFileProcWLAP.php?id=<?php echo $file->FileName;?>.pdf&week=<?php echo $file->Week_num_for_WLAP;?> " method="post" enctype="multipart/form-data">
                     <h3>Upload a revision of file</h3>
                     <div class="btnPos">
                   <label class="btn btn-sub">
@@ -408,8 +398,8 @@
                   }
                 </script>
                   <p>The format of the file should be pdf.</p>
-                  <p>The file will be renamed as <?php echo $file_var."- Week1"?>.pdf</p>
-                  <?php }
+                  <p>The file will be renamed as <?php echo $file->FileName; ?>.pdf</p>
+                  <?php
                   date_default_timezone_set('asia/manila');
                   $date=date('d-m-Y');
                   $time = date("h:i");
@@ -424,6 +414,7 @@
             </div>
           <!-- /#Popup window -->
         </div>
+        <?php } ?>
 			<!--/#page-wrapper -->
 		</div>
 		<!-- /#wrapper -->
