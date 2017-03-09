@@ -122,8 +122,6 @@
                     <tr>
 											<td id="name"><?php echo   $faculty->FirstName; ?> <?php echo  $faculty->MiddleName; ?>. <?php echo  $faculty->LastName; ?></td>
 											<td><a href="adminFacultyMgmtSchedule.php?userid=<?php echo $faculty->UserID;?>">View</a> | <a href="adminAddSchedule.php?userid=<?php echo $faculty->UserID;?>">Add</a></td>
-
-</td>
 										</tr>
                       <?php } ?>
 									</tbody>
@@ -135,6 +133,68 @@
 						<!-- /.panel -->
 					</div>
 					<!-- /.col-lg-4 -->
+
+					<div class="col-lg-7">
+            <?php
+            require ("database.php");
+            $UserID=$_GET['userid'];
+            $sql="SELECT user.UserID,user.FirstName,user.LastName,LEFT(user.MiddleName,1) as 'MiddleName',user.TypeofUserNum FROM user WHERE user.UserID ='".$UserID."'";
+            $result1 = mysqli_query($conn,$sql);
+
+            ?>
+						<div class="panel panel-green">
+              <?php while ($faculty = mysqli_fetch_object($result1)){?>
+							<div class="panel-heading">
+								<i class="fa fa-calendar fa-fw"></i>&nbsp; Engr.<?php echo   $faculty->FirstName; ?> <?php echo  $faculty->LastName; ?>'s Schedule
+							</div>
+               <?php } ?>
+							<!-- /.panel-heading -->
+							<div class="panel-body">
+								<!-- Tab panes -->
+								<form class="navbar-form">
+									<div class="form-group">
+									  <input type="text" placeholder="Search for..." class="form-control">
+									</div>
+								</form>
+                <?php
+                require ("database.php");
+                  $UserID=$_GET['userid'];
+                $sql="Select c.CourseName,s.CourseCode,s.ScheduleDay,s.ScheduleTimeIN,s.ScheduleTimeOUT,s.Section,s.Room from schedule s INNER JOIN course c ON c.CourseCode = s.CourseCode WHERE s.userID = '".$UserID."' ORDER by c.CourseName ";
+                $result4 = mysqli_query($conn,$sql);
+                 ?>
+
+								<table class="table table-scroll table-striped">
+									<thead>
+										<tr>
+											<th>Course Code</th>
+											<th>Descriptive Title</th>
+											<th>Section</th>
+											<th>Day</th>
+											<th>Time</th>
+											<th>Room</th>
+										</tr>
+									</thead>
+
+									<tbody>
+                    <?php while ($schedule = mysqli_fetch_object($result4)){?>
+											<tr>
+												<td id="code"><?php echo $schedule->CourseCode;?></td>
+												<td id="desc"><?php echo $schedule->CourseName;?></td>
+												<td id="sec"><?php echo $schedule->Section;?></td>
+												<td id="day"><?php echo $schedule->ScheduleDay;?></td>
+												<td id="time"><?php echo $schedule->ScheduleTimeIN;?>-<?php echo $schedule->ScheduleTimeOUT;?></td>
+												<td id="room"><?php echo $schedule->Room;?></td>
+											</tr>
+	                         <?php } ?>
+									</tbody>
+								</table>
+							</div>
+							<!-- /.panel-body -->
+						</div>
+						<!-- /.panel -->
+					</div>
+					<!-- /.col-lg-6 -->
+
 				</div>
 				<!-- /.row -->
 
@@ -169,7 +229,7 @@
 				</div>
 				<!-- /#Popup window -->
 
-
+				
 
 				<!-- Footer -->
 				<footer class="text-center">

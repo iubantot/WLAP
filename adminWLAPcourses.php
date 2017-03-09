@@ -241,32 +241,7 @@
               </div>
   						<!-- /.panel -->
 
-						<!-- WLAP List of Other Courses -->
-						<div class="panel panel-green"  style="display:none;"  id="WLAPList2">
-							<div class="panel-heading" id="code">
-								CPE 501 WLAP List
-							</div>
-							<!-- /.panel-heading -->
 
-							<div class="panel-body" style="overflow-y:auto; height:415px;">
-								<!-- Tab panes -->
-								<div class="tab-content">
-									<div class="list-group">
-										<span href="#" class="list-group-item">
-											<a data-toggle="modal" data-target="#modal_viewWLAP" id="week">Week 1</a>
-											<a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-												<i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
-											</a>
-											<ul class="dropdown-menu">
-												<li><a onclick="" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-											</ul>
-										</span>
-									</div>
-								</div>
-							</div>
-							<!-- /.panel-body -->
-						</div>
-						<!-- /.panel -->
 
 					</div>
 					<!-- /.col-lg-4 -->

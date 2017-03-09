@@ -211,24 +211,25 @@
 
               ?>
 								<div class="list-group">
-                  		<span href="#" class="list-group-item">
-									<?php while ($notification = mysqli_fetch_object($result1)){?>
 
+									<?php while ($notification = mysqli_fetch_object($result1)){?>
+                    <span href="#" class="list-group-item">
 										<a data-toggle="modal" data-target="#modal_viewWLAP" id="coursecode">
 
                       <i class="fa fa-file-text-o fa-fw"></i>&nbsp;<?php echo $notification->CourseCode;?></a><br>
   										<span class="pull-left text-muted small">Revised by: <em id="faculty"><?php echo $notification->Username;?></em></span>
   										<span class="pull-right text-muted small" id="datetime"><?php echo $notification->DateUpload;?> | <?php echo $notification->TimeUpload;?></span>
-
+                            </span>
                   <?php } ?>
                   <?php while ($notification2 = mysqli_fetch_object($result2)){?>
+                    <span href="#" class="list-group-item">
                     <a data-toggle="modal" data-target="#modal_viewWLAP" id="coursecode">
                       <i class="fa fa-file-text-o fa-fw"></i>&nbsp;<?php echo $notification2->CourseCode;?></a><br>
                       <span class="pull-left text-muted small">Status: <em id="faculty"><?php echo $notification2->Status;?></em></span>
                       <span class="pull-right text-muted small" id="datetime"><?php echo $notification2->DateUpload;?> | <?php echo $notification2->TimeUpload;?></span>
-
+                        </span>
                   <?php } ?>
-                </span>
+
 								</div>
 								<!-- /.list-group -->
 

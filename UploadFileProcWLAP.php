@@ -1,7 +1,9 @@
 <?php
-  include ('configtest.php');
+  include ('database.php');
+
   $get_file_name = $_GET['id'];
   $get_file_week = $_GET['week'];
+  $get_coursecode =  $_GET['coursecode'];
   if(isset($_POST['submitbtn'])){
   $dir = "pdf_pend/";
   $file_name = $dir.$get_file_name;
@@ -12,7 +14,10 @@
   $class = "WLAP";
   $week = $get_file_week;
   $stat = "Pending";
-
+  date_default_timezone_set('asia/manila');
+  $date= date('Y-m-d');
+  $time = date("h:i");
+  $time1 = date('h:i A', strtotime($time));
   if ($file_type != "pdf"){ ?> <!--To check the file extension-->
     <script>
       alert('The file is not in a pdf format. Save the file first as pdf file then try upload again.');
@@ -23,15 +28,24 @@
 
   else{
     $new_size = $file_size/1024; //to convert to kb
-
+ require ("session.php");
     if(move_uploaded_file($file_loc,$file_name)){
-      /*$sql="INSERT INTO file(FileName,FileSize,FileClass,Week_num_for_WLAP,Status) VALUES('$file_name','$new_size','$class','$week', '$stat')";
-      mysql_query($sql);*/
-      ?>
-        <script>
+
+      $sql="INSERT INTO file(FileType,FileName,FileSize,FileClass,DateUpload,TimeUpload,Week_num_for_WLAP,Status,CourseCode,UserID) VALUES('pdf','$file_name','$new_size','$class','$date','$time1','$week','$stat','$get_coursecode','$IuserID')";
+      $query = mysqli_query($conn,$sql);
+
+      if($query){
+
+        echo "<script>
           alert('Successfuly uploaded.');
-          window.location.href="facWLAP.php";
-        </script>
+          window.location.href='facWLAP.php';
+        </script>";
+
+
+
+      }
+      ?>
+
     <?php }
     else{ ?>
       <script>

@@ -146,7 +146,7 @@
 														<a data-toggle="modal" data-target="#modal_viewSyllabus<?php echo $course->CourseCode ?>" id="down"><?php echo $course->CourseName;?></a>
 													</td>
 													<td>
-														<a href="DownloadFileSyllabus.php?down=<?php echo $course->CourseCode;?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a>
+														<a href="DownloadFileSyllabus.php?down=<?php echo $course->CourseCode;?>_Syllabus.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a>
 													</td>
 												</tr>
                          <?php } ?>
@@ -180,7 +180,7 @@
 														<a data-toggle="modal" data-target="#modal_viewSyllabus<?php echo $othercourses->CourseCode;?>" id="down"><?php echo $othercourses->CourseName;?></a>
 													</td>
 													<td>
-														<a href="DownloadFileSyllabus.php?down=<?php echo $othercourses->CourseCode;?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a>
+														<a href="DownloadFileSyllabus.php?down=<?php echo $othercourses->CourseCode;?>_Syllabus.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a>
 													</td>
 												</tr>
                          <?php } ?>

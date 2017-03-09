@@ -179,7 +179,7 @@
 														<a data-toggle="modal" data-target="#modal_viewSyllabus<?php echo $othercourses->CourseCode;?>" id="down"><?php echo $othercourses->CourseName;?></a>
 													</td>
 													<td>
-                            	<a href="DownloadFileAdminSylab.php?down=<?php echo $othercourses->CourseCode;?>.pdf" id="down">Download</a> | <a data-toggle="modal" data-target="#modal_upload" id="up">Upload</a>
+                            	<a href="DownloadFileAdminSylab.php?down=<?php echo $othercourses->CourseCode;?>_Syllabus.pdf" id="down">Download</a> | <a data-toggle="modal" data-target="#modal_upload" id="up">Upload</a>
 													</td>
 												</tr>
                         <?php } ?>

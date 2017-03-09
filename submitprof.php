@@ -51,9 +51,65 @@ if(isset($_POST['submit'])){
       else{
         echo "<script>
                     alert('please fill-out all fields!');
-                    window.location.href='addPatient.php?id=<?php echo $hospital;?>';
+                    window.location.href='adminFacultyMgmtSchedule.php?id=<?php echo $userID;?>';
                 </script>";
       }
+
+    }
+    else if(isset($_POST['submitschedule'])){
+
+        $coursecode = $_POST['code'];
+        $section = $_POST['section'];
+        $day = $_POST['day'];
+        $time = $_POST['timeIN'];
+        $time2 = $_POST['timeOUT'];
+        $room = $_POST['room'];
+        $user = $_GET['userid'];
+        $start= date('h:i a ', strtotime($time));
+        $end= date('h:i a ', strtotime($time2));
+
+
+
+
+
+
+
+
+
+        if(($coursecode != "") && ($section != "") && ($day != "")){
+
+
+
+          $sql2 = "INSERT INTO schedule (ScheduleDay,ScheduleTimeIN,ScheduleTimeOUT,Section,Room,CourseCode,UserID) VALUES ('$day', '$start', '$end', '$section', '$room','$coursecode','$user')";
+
+
+            $query2 = mysqli_query($conn,$sql2);
+
+            if($query2){
+
+              echo "<script>
+                          alert('The Schedule has been added !');
+                          window.location.href='adminAddSchedule.php?userid=$user';
+                      </script>";
+
+
+
+            }
+
+            else {
+              echo "Error :" .$sql. "<br>".mysqli_error($conn);
+
+            }
+
+
+            }
+
+            else{
+              echo "<script>
+                          alert('please fill-out all fields!');
+                          window.location.href='adminAddSchedule.php?userid=$user';
+                      </script>";
+            }
 
     }
 
