@@ -33,6 +33,18 @@
 				width:100%;
 				height: calc(100vh - 155px);
 			}
+
+            .btnPos {
+              padding-left: 100px;
+              padding-right: 100px;
+              padding-bottom: 20px;
+              text-align:center;
+            }
+            .inputFile {
+              position: absolute;
+              opacity: 0;
+            }
+
 		</style>
 
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -127,7 +139,7 @@
 								$sql="Select distinct c.CourseOrder,c.CourseName,s.CourseCode from schedule s INNER JOIN course c ON c.CourseCode = s.CourseCode WHERE s.userID = '".$IuserID."' ORDER by c.CourseName ";
 								$result1 = mysqli_query($conn,$sql);
 
-								 ?>
+                 ?>
 									<div class="tab-pane fade " id="mycourses">
 										<table class="table table-scroll table-striped">
 											<thead>
@@ -194,7 +206,7 @@
           require ("database.php");
           $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
           $result1 = mysqli_query($conn,$sql);
-          $sql="Select Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
+          $sql="Select file.FileName, file.CourseCode, file.Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
           $result5 = mysqli_query($conn,$sql);
 
            ?>
@@ -215,15 +227,8 @@
                       <i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
                     </a>
                     <ul class="dropdown-menu">
-                      <?php
-                      $courseorder=$_GET['id'];
-                      require ("database.php");
-                      $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
-                      $result2 = mysqli_query($conn,$sql);
-                      while ($course = mysqli_fetch_object($result2)){?>
-                        <li><a href="DownloadFile.php?down=<?php echo $course->CourseCode?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-                      <?php } ?>
-                      <li><a data-toggle="modal" data-target="#modal_upload" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
+                      <li><a href="DownloadFileWLAP.php?down=<?php echo $weeks->FileName; ?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
+                      <li><a data-toggle="modal" data-target="#modal_upload<?php echo $weeks->FileName;?>" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
                       <li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
                     </ul>
                   </span>
@@ -339,65 +344,81 @@
 				</div>
 				<!-- /#Popup window -->
 
+        				<!-- Footer -->
+        				<footer class="text-center">
+        					<div class="footer-below">
+        						<div class="container">
+        							<div class="row">
+        								<div class="col-lg-12" style="color:#666666;">
+        									Copyright &copy; WLAP and Syllabus Management System 2017
+        								</div>
+        							</div>
+        						</div>
+        					</div>
+        				</footer>
+
+        			</div>
+        			<!--/#page-wrapper -->
+        		</div>
+        		<!-- /#wrapper -->
+
         <?php
         $courseorder=$_GET['id'];
         require ("database.php");
-        $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
-        $result2 = mysqli_query($conn,$sql);
+        $sql="Select file.FileName, file.CourseCode, file.Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
+        $result5 = mysqli_query($conn,$sql);
          ?>
 
           <!-- Popup view of Upload -->
-          <div class="modal fade" id="modal_upload" role="dialog">
+          <?php while($file = mysqli_fetch_object($result5)){ ?>
+          <div class="modal fade" id="modal_upload<?php echo $file->FileName; ?>" role="dialog">
             <div class="modal-dialog">
               <!-- Modal content-->
               <div class="modal-content">
               <div class="modal-header">
-                <?php
-                $courseorder=$_GET['id'];
-                while ($course = mysqli_fetch_object($result2)){?>
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title"><?php echo $course->CourseCode ?>- Upload File</h4>
+                  <h4 class="modal-title"><?php echo $file->CourseCode; ?>- Upload File</h4>
               </div>
               <div class="modal-body" style="height: 350px;"><br>
-                  <form action="UploadFileProc.php" method="post" enctype="multipart/form-data">
+                <form action="UploadFileProcWLAP.php?id=<?php echo $file->FileName;?>.pdf&week=<?php echo $file->Week_num_for_WLAP; ?>" method="post" enctype="multipart/form-data">
                     <h3>Upload a revision of file</h3>
-                    <input type="file" name="fileToUpload" />
-                    <button type="submit" name="submitbtn">Upload</button>
-                  </form>
-                  <p>The file will be renamed as <?php echo $course->CourseCode; ?>.pdf/doc</p>
-                  <?php }
-                  date_default_timezone_set('asia/manila');
-                  $date=date('d-m-Y');
-                  $time = date("h:i");
-                  ?>
-                  <span class="pull-left text-muted small" style="display:block;">
-                      Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
+                    <div class="btnPos">
+                  <label class="btn btn-sub">
+                    <span id="input-value">Choose file</span>
+                    <input type="file" name="fileUpload" class="inputFile" id="inFile"/>
+                  </label>
+                  </div>
+                  <span class="pull-right" style="margin-top:-20px;">
+                  <button type="submit" name="submitbtn" class="btn btn-sub">Upload</button>
                   </span>
-              </div>
-              <!-- /#modal-body -->
-              </div>
-              <!-- /#modal-content -->
+                  </form>
+                <script>
+                  document.getElementById('inFile').addEventListener('change', function(){
+                    myFunction();
+                  });
+                  function myFunction(){
+                      var inputVal = document.getElementById('inFile').value;
+                      document.getElementById('input-value').innerHTML=inputVal.substr(12);
+                  }
+                </script>
+                <p>The format of the file should be pdf.</p>
+                <p>The file will be renamed as <?php echo $file->FileName;?>.pdf</p>
+                <?php
+                date_default_timezone_set('asia/manila');
+                $date=date('d-m-Y');
+                $time = date("h:i");
+                ?>
+                <span class="pull-left text-muted small" style="display:block;">
+                    Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
+                </span>
             </div>
-            <div>
-          <!-- /#Popup window -->
-
-				<!-- Footer -->
-				<footer class="text-center">
-					<div class="footer-below">
-						<div class="container">
-							<div class="row">
-								<div class="col-lg-12" style="color:#666666;">
-									Copyright &copy; WLAP and Syllabus Management System 2017
-								</div>
-							</div>
-						</div>
-					</div>
-				</footer>
-
-			</div>
-			<!--/#page-wrapper -->
-		</div>
-		<!-- /#wrapper -->
+            <!-- /#modal-body -->
+            </div>
+            <!-- /#modal-content -->
+          </div>
+          <div>
+        <?php } ?>
+        <!-- /#Popup window -->
 
 		 <!-- jQuery -->
 		<script src="js/jquery.min.js"></script>

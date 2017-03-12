@@ -191,50 +191,13 @@
 
               <!-- /.panel-heading -->
 
-              <div class="panel-body" style="overflow-y:auto; height:415px;">
-                <div class="list-group">
-                  <span href="#" class="list-group-item">
-                    <a data-toggle="modal" data-target="#modal_viewWLAP" id="week">Week 1</a>
-                    <a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                      <i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
-                    </a>
-                    <ul class="dropdown-menu">
-                      <li><a onclick="" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-                      <li><a onclick="" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
-                      <li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
-                    </ul>
-                  </span>
-                </div>
-              </div>
+
               <!-- /.panel-body -->
             </div>
 						<!-- /.panel -->
 
 						<!-- WLAP List of Other Courses -->
-						<div class="panel panel-green" style="display:none;" id="WLAPList2">
-							<div class="panel-heading" id="code">
-								CPE 501 WLAP List
-							</div>
-							<!-- /.panel-heading -->
 
-							<div class="panel-body" style="overflow-y:auto; height:415px;">
-								<!-- Tab panes -->
-								<div class="tab-content">
-									<div class="list-group">
-										<span href="#" class="list-group-item">
-											<a data-toggle="modal" data-target="#modal_viewWLAP" id="week">Week 1</a>
-											<a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-												<i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
-											</a>
-											<ul class="dropdown-menu">
-												<li><a onclick="" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-											</ul>
-										</span>
-									</div>
-								</div>
-							</div>
-							<!-- /.panel-body -->
-						</div>
 						<!-- /.panel -->
 
 					</div>
@@ -244,54 +207,12 @@
 				<!-- /.row -->
 
 				<!-- Popup for remarks -->
-				<div class="modal fade" id="modal_viewWLAP" role="dialog">
-					<div class="modal-dialog">
-					  <!-- Modal content-->
-					  <div class="modal-content">
-						<div class="modal-header">
-						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-						  <h4 class="modal-title">COE 002A - Week 1</h4>
-						</div>
-						<div class="modal-body">
-							...
-						</div>
-					  </div>
-					</div>
+
 				</div>
 				<!-- /#Popup window -->
 
 				<!-- Popup view of WLAP -->
-				<div class="modal fade" id="modal_remarks" role="dialog">
-					<div class="modal-dialog">
-					  <!-- Modal content-->
-					  <div class="modal-content">
-						<div class="modal-header">
-						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-						  <h4 class="modal-title">COE 002A - Week 1 Remars</h4>
-						</div>
-						<div class="modal-body" style="height: 350px;"><br>
-							<div class="form-group">
-								Add remarks here:
-								<textarea class="form-control" rows="6" id="comment"></textarea>
-							</div>
 
-							<span class="pull-right" style="margin-top:-20px;">
-								<button href="facHome..php" class="btn btn-sub"><b>Submit</b></button>
-							</span>
-							<?php
-						date_default_timezone_set('asia/manila');
-						$date=date('d-m-Y');
-						$time = date("h:i");
-						?>
-							<span class="pull-left text-muted small" style="display:block;">
-									Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
-							</span>
-						</div>
-						<!-- /#modal-body -->
-					  </div>
-					  <!-- /#modal-content -->
-					</div>
-				</div>
 				<!-- /#Popup window -->
 
 				<!-- Footer -->

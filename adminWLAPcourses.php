@@ -24,7 +24,7 @@
 				background:none !important;
 				background-color: #fff !important;
 			}
-			.container-pdf * > .modal-body{
+      .container-pdf * > .modal-body{
 				width:100%;
 				height: calc(100vh - 125px);
 
@@ -33,6 +33,18 @@
 				width:100%;
 				height: calc(100vh - 155px);
 			}
+
+            .btnPos {
+              padding-left: 100px;
+              padding-right: 100px;
+              padding-bottom: 20px;
+              text-align:center;
+            }
+            .inputFile {
+              position: absolute;
+              opacity: 0;
+            }
+
 		</style>
 
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -196,7 +208,7 @@
           require ("database.php");
           $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
           $result1 = mysqli_query($conn,$sql);
-          $sql="Select Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
+          $sql="Select file.FileName, file.CourseCode, file.Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
           $result5 = mysqli_query($conn,$sql);
 
            ?>
@@ -217,51 +229,19 @@
                       <i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
                     </a>
                     <ul class="dropdown-menu">
-                    <?php
-                    $courseorder=$_GET['id'];
-                    require ("database.php");
-                    $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
-                    $result2 = mysqli_query($conn,$sql);
-                    while ($course = mysqli_fetch_object($result2)){?>
-                      <li><a href="DownloadFile.php?down=<?php echo $course->CourseCode?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-                    <?php } ?>
-                      <li><a data-toggle="modal" data-target="#modal_upload" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
-                      <li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
-                    </ul>
-                  </span>
-                 <?php } ?>
+                        <li><a href="DownloadFileAdminWLAP.php?down=<?php echo $weeks->FileName; ?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
+                        <li><a data-toggle="modal" data-target="#modal_upload<?php echo $weeks->FileName;?> " id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
+                        <li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
+                      </ul>
+                    </span>
+                   <?php } ?>
+                  </div>
                 </div>
+                <!-- /.panel-body -->
               </div>
-              <!-- /.panel-body -->
-            </div>
-						<!-- /.panel -->
+  						<!-- /.panel -->
 
-						<!-- WLAP List of Other Courses -->
-						<div class="panel panel-green"  style="display:none;"  id="WLAPList2">
-							<div class="panel-heading" id="code">
-								CPE 501 WLAP List
-							</div>
-							<!-- /.panel-heading -->
 
-							<div class="panel-body" style="overflow-y:auto; height:415px;">
-								<!-- Tab panes -->
-								<div class="tab-content">
-									<div class="list-group">
-										<span href="#" class="list-group-item">
-											<a data-toggle="modal" data-target="#modal_viewWLAP" id="week">Week 1</a>
-											<a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-												<i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
-											</a>
-											<ul class="dropdown-menu">
-												<li><a onclick="" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-											</ul>
-										</span>
-									</div>
-								</div>
-							</div>
-							<!-- /.panel-body -->
-						</div>
-						<!-- /.panel -->
 
 					</div>
 					<!-- /.col-lg-4 -->
@@ -269,6 +249,34 @@
 				</div>
 				<!-- /.row -->
 
+        <?php
+  		          $courseorder=$_GET['id'];
+  		          require ("database.php");
+  		          $sql="Select file.CourseCode, file.Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE CourseOrder = '".$courseorder."'";
+  		          $result2 = mysqli_query($conn,$sql);
+           	  ?>
+
+				<!-- Popup for remarks -->
+        <div class="container-pdf">
+        <?php while ($course = mysqli_fetch_object($result2)){?>
+          <div class="modal fade" id="modal_viewWLAP<?php echo $course->Week_num_for_WLAP;?>" role="dialog">
+            <div class="modal-dialog modal-lg">
+              <!-- Modal content-->
+              <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><?php echo $course->CourseCode ?>- Week <?php echo $course->Week_num_for_WLAP;?></h4>
+              </div>
+              <div class="modal-body">
+                <div id="pdf-container<?php echo $course->Week_num_for_WLAP;?>"></div>
+              </div>
+
+              </div>
+            </div>
+          </div>
+          <?php }?>
+        </div>
+          <!-- /#Popup window -->
 				<?php
 		          $courseorder=$_GET['id'];
 		          require ("database.php");
@@ -297,53 +305,119 @@
 			</div>
 				<!-- /#Popup window -->
 
+          <?php
+          $courseorder=$_GET['id'];
+          require ("database.php");
+          $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
+          $result2 = mysqli_query($conn,$sql);
+           ?>
 				<!-- Popup view of WLAP -->
-				<div class="modal fade" id="modal_remarks" role="dialog">
-					<div class="modal-dialog">
-					  <!-- Modal content-->
-					  <div class="modal-content">
-						<div class="modal-header">
-						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-						  <h4 class="modal-title">COE 002A - Week 1 Remars</h4>
-						</div>
-						<div class="modal-body" style="height: 350px;"><br>
-							<div class="form-group">
-								Add remarks here:
-								<textarea class="form-control" rows="6" id="comment"></textarea>
-							</div>
+        <div class="modal fade" id="modal_remarks" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+            <div class="modal-header">
+              <?php
+              while ($course = mysqli_fetch_object($result2)){?>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><?php echo $course->CourseCode; ?>- Week 1 Remarks</h4>
+              <?php }?>
+            </div>
+            <div class="modal-body" style="height: 350px;"><br>
+              <div class="form-group">
+                Add remarks here:
+                <textarea class="form-control" rows="6" id="comment"></textarea>
+              </div>
 
-							<span class="pull-right" style="margin-top:-20px;">
-								<button href="facHome..php" class="btn btn-sub"><b>Submit</b></button>
-							</span>
-							<?php
-						date_default_timezone_set('asia/manila');
-						$date=date('d-m-Y');
-						$time = date("h:i");
-						?>
-							<span class="pull-left text-muted small" style="display:block;">
-									Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
-							</span>
-						</div>
-						<!-- /#modal-body -->
-					  </div>
-					  <!-- /#modal-content -->
-					</div>
-				</div>
-				<!-- /#Popup window -->
+              <span class="pull-right" style="margin-top:-20px;">
+                <button href="facHome.php" class="btn btn-sub"><b>Submit</b></button>
+              </span>
+              <?php
+            date_default_timezone_set('asia/manila');
+            $date=date('d-m-Y');
+            $time = date("h:i");
+            ?>
+              <span class="pull-left text-muted small" style="display:block;">
+                  Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
+              </span>
+            </div>
+            <!-- /#modal-body -->
+            </div>
+            <!-- /#modal-content -->
+          </div>
+        </div>
+        <!-- /#Popup window -->
 
-				<!-- Footer -->
-				<footer class="text-center">
-					<div class="footer-below">
-						<div class="container">
-							<div class="row">
-								<div class="col-lg-12" style="color:#666666;">
-									Copyright &copy; WLAP and Syllabus Management System 2017
-								</div>
-							</div>
-						</div>
-					</div>
-				</footer>
+        <!-- Footer -->
+        <footer class="text-center">
+          <div class="footer-below">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-12" style="color:#666666;">
+                  Copyright &copy; WLAP and Syllabus Management System 2017
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
 
+        <?php
+        $courseorder=$_GET['id'];
+        require ("database.php");
+        $sql="Select file.FileName, file.CourseCode, file.Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
+        $result5 = mysqli_query($conn,$sql);
+         ?>
+
+          <!-- Popup view of Upload -->
+          <?php while($file = mysqli_fetch_object($result5)){ ?>
+          <div class="modal fade" id="modal_upload<?php echo $file->FileName;?>" role="dialog">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title"><?php echo $file->CourseCode; ?>- Upload File</h4>
+              </div>
+              <div class="modal-body" style="height: 350px;"><br>
+                <form action="UploadFileProcAdminWLAP.php?id=<?php echo $file->FileName?>.pdf&week=<?php echo $file->Week_num_for_WLAP;?>" method="post" enctype="multipart/form-data">
+                    <h3>Upload a revision of file</h3>
+                    <div class="btnPos">
+                  <label class="btn btn-sub">
+                    <span id="input-value">Choose file</span>
+                    <input type="file" name="fileUpload" class="inputFile" id="inFile"/>
+                  </label>
+                  </div>
+                  <span class="pull-right" style="margin-top:-20px;">
+                  <button type="submit" name="submitbtn" class="btn btn-sub">Upload</button>
+                  </span>
+                  </form>
+                <script>
+                  document.getElementById('inFile').addEventListener('change', function(){
+                    myFunction();
+                  });
+                  function myFunction(){
+                      var inputVal = document.getElementById('inFile').value;
+                      document.getElementById('input-value').innerHTML=inputVal.substr(12);
+                  }
+                </script>
+                  <p>The format of the file should be pdf.</p>
+                  <p>The file will be renamed as <?php echo $file->FileName;?>.pdf</p>
+                  <?php
+                  date_default_timezone_set('asia/manila');
+                  $date=date('d-m-Y');
+                  $time = date("h:i");
+                  ?>
+                  <span class="pull-left text-muted small" style="display:block;">
+                      Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
+                  </span>
+              </div>
+              <!-- /#modal-body -->
+              </div>
+              <!-- /#modal-content -->
+            </div>
+          </div>
+          <?php } ?>
+          <!-- /#Popup window -->
 			</div>
 			<!--/#page-wrapper -->
 		</div>
@@ -380,6 +454,21 @@
 						PDFObject.embed(<?php echo "\"pdf/WLAP/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->Week_num_for_WLAP;?>");
 		<?php }?>
 		</script>
+
+    <!-- PDFObject Location to Read and View PDF -->
+
+    <?php
+            $courseorder=$_GET['id'];
+            require ("database.php");
+            $sql="Select FileName, Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
+            $result3 = mysqli_query($conn,$sql);
+      ?>
+
+    <script>
+    <?php while ($pdf = mysqli_fetch_object($result3)){?>
+          PDFObject.embed(<?php echo "\"pdf/WLAP/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->Week_num_for_WLAP;?>");
+    <?php }?>
+    </script>
 
 	</body>
 

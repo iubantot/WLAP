@@ -1,5 +1,5 @@
 <?php
-      require("session.php");
+      require("sessionadmin.php");
     require("database.php");
 
     $error=''; // Variable To Store Error Message

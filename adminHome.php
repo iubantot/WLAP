@@ -188,7 +188,7 @@
 							<div class="panel-body" style="overflow-y:auto; height:176px;">
                 <?php
 							require ("database.php");
-							$sql="SELECT file.FileID,file.CourseCode,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE file.Status = 'For Review' ORDER BY file.DateUpload ASC  ";
+							$sql="SELECT file.FileID,file.CourseCode,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE file.Status = 'Pending' ORDER BY file.DateUpload ASC  ";
 							$result1 = mysqli_query($conn,$sql);
 
 							 ?>
@@ -197,7 +197,7 @@
                   	<?php while ($notification = mysqli_fetch_object($result1)){?>
 									<span href="#" class="list-group-item" style="height:100px;">
 										<a data-toggle="modal" data-target="#modal_viewWLAP" id="coursecode">
-                    <span class="pull-left text-muted small" style="display:hidden;" ><em id="faculty" name="FileID" ><?php echo $notification->FileID;?></em></span>
+                    <span hidden class="pull-left text-muted small" style="display:hidden;" ><em id="faculty" name="FileID" ><?php echo $notification->FileID;?></em></span>
 										<i class="fa fa-file-text-o fa-fw" ></i>&nbsp;<?php echo $notification->CourseCode;?></a><br>
 										<span class="pull-left text-muted small">Revised by: <em id="faculty"><?php echo $notification->Username;?></em></span>
 										<span class="pull-right text-muted small" id="datetime"><?php echo $notification->DateUpload;?> | <?php echo $notification->TimeUpload;?></span>
