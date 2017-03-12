@@ -198,7 +198,7 @@
 							<div class="panel-body" style="overflow-y:auto; height:176px;">
                 <?php
 							require ("database.php");
-							$sql="SELECT file.FileID,file.CourseCode,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE file.Status = 'Pending' ORDER BY file.DateUpload ASC  ";
+							$sql="SELECT file.FileID,file.CourseCode,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE file.Status = 'Pending' AND file.FileClass='WLAP' ORDER BY file.DateUpload ASC  ";
 							$result1 = mysqli_query($conn,$sql);
 
 							 ?>
@@ -231,7 +231,7 @@
 
 				<?php
 							require ("database.php");
-							$sql="SELECT file.FileID,file.CourseCode,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE file.Status = 'Pending' ORDER BY file.DateUpload ASC  ";
+							$sql="SELECT file.FileID,file.CourseCode,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE file.Status = 'Pending' AND file.FileClass='WLAP' ORDER BY file.DateUpload ASC  ";
 							$result5 = mysqli_query($conn,$sql);
 				 ?>
 
@@ -288,7 +288,7 @@
 						<div class="modal-body" style="width:500px;">
               <?php
             require ("database.php");
-            $sql="SELECT file.CourseCode,file.DateUpload,file.FileID, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND file.Status = 'For Review' ORDER BY file.DateUpload ASC";
+            $sql="SELECT file.CourseCode,file.DateUpload,file.FileID, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE() AND file.FileClass='WLAP') AND file.Status = 'For Review' ORDER BY file.DateUpload ASC";
             $result1 = mysqli_query($conn,$sql);
 
              ?>
