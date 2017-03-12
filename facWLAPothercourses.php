@@ -291,7 +291,7 @@
 						  <h4 class="modal-title"><?php echo $course->CourseCode ?> - Week <?php echo $course->Week_num_for_WLAP;?></h4>
 						</div>
 						<div class="modal-body">
-							<div id="pdf-container"></div>
+							<div id="pdf-container"<?php echo $course->Week_num_for_WLAP;?>></div>
 						</div>
 					  </div>
 					</div>
