@@ -113,11 +113,11 @@
 
 								<!-- Tab panes -->
 								<div class="tab-content"><br>
-									<form class="navbar-form">
+
 										<div class="form-group">
-										  <input type="text" placeholder="Search for..." class="form-control">
+
 										</div>
-									</form>
+
                   <?php
 
 								$t=date('d-m-Y');
@@ -154,15 +154,34 @@
 										</table>
 									</div>
                   <?php
-
                   $t=date('d-m-Y');
                   $p=date("D",strtotime($t));
                   require ("database.php");
-                  $sql="Select distinct T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID is NULL ORDER by CourseName";
+                  $sql="Select distinct T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID !='".$IuserID."' or T.UserID is NULL  ORDER by CourseName";
                   $result1 = mysqli_query($conn,$sql);
-
                    ?>
-									<div class="tab-pane fade" id="other">
+                  <div class="tab-pane fade" id="other">
+                    <?php
+
+                    $t=date('d-m-Y');
+                    $p=date("D",strtotime($t));
+                    require ("database.php");
+                    $sql="Select distinct T.CourseCode from (Select distinct c.CourseOrder,c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID !='".$IuserID."' or T.UserID is NULL  ORDER by CourseName";
+                    $result2 = mysqli_query($conn,$sql);
+
+                     ?>
+                    <form>
+                    &nbsp;   &nbsp;   &nbsp;  Find course code: &nbsp;
+                    <select name="users" onchange="showUser(this.value)">
+                      <?php while ($othercourses = mysqli_fetch_object($result2)){?>
+                      <option value="<?php echo $othercourses->CourseCode;?>"><?php echo $othercourses->CourseCode;?></option>
+
+                      <?php } ?>
+                    </select>
+                        </form>
+
+                      
+                    <div class="panel-body" id="txtHint">
 										<table class="table table-scroll table-striped">
 											<thead>
 												<tr>
@@ -187,6 +206,7 @@
 											</tbody>
 										</table>
 									</div>
+                </div>
 								</div>
 							</div>
 							<!-- /.panel-body -->
@@ -226,6 +246,28 @@
 				</div>
 		<?php }?>
 			</div>
+      <div class="container-pdf">
+  <?php while ($course = mysqli_fetch_object($result2)){?>
+        <div class="modal fade" id="modal_viewSyllabus1<?php echo $course->CourseCode ?>" role="dialog">
+          <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+            <div class="modal-header">
+
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title"><?php echo $course->CourseCode ?> - Syllabus</h4>
+            </div>
+            <div class="modal-body">
+              <div id="pdf-container<?php echo $course->CourseCode?>"></div> <!--contrainer for view pdf -->
+            </div>
+
+            <!-- /#modal-body -->
+          </div>
+            <!-- /#modal-content -->
+        </div>
+      </div>
+  <?php }?>
+    </div>
 				<!-- /#Popup window -->
 
 				<!-- Footer -->
@@ -287,6 +329,29 @@
 						PDFObject.embed(<?php echo "\"pdf/Syllabus/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->CourseCode;?>");
 		<?php }?>
     </script>
+    <script>
+function showUser(str) {
+    if (str == "") {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else {
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET","getfacsyllabus.php?q="+str,true);
+        xmlhttp.send();
+    }
+}
+</script>
 	</body>
 
 </html>

@@ -83,7 +83,7 @@
 								<a href="adminHome.php"><i class="fa fa-3x fa-home fa-fw"></i><br>Home</a>
 							</li>
 							<li>
-								<a href="#"><i class="fa fa-3x fa-calendar-o fa-fw"></i><br>WLAP</a>
+								<a href="adminWLAP.php"><i class="fa fa-3x fa-calendar-o fa-fw"></i><br>WLAP</a>
 							</li>
 							<li>
 								<a href="adminSyllabus.php"><i class="fa fa-3x fa-file-text-o fa-fw"></i><br>Syllabus</a>
@@ -92,7 +92,7 @@
 								<a href="adminFacultyMgmt.php"><i class="fa fa-3x fa-id-card-o fa-fw"></i><br>Faculty</a>
 							</li>
 							<li>
-								<a href="logout.php"><i class="fa fa-3x fa-sign-out fa-fw"></i><br>Logout</a>
+								<a href="adminlogout.php"><i class="fa fa-3x fa-sign-out fa-fw"></i><br>Logout</a>
 							</li>
 
 						</ul>
@@ -120,19 +120,15 @@
 							<div class="panel-body">
 								<!-- Nav tabs -->
 								<ul class="nav nav-tabs nav-justified">
-									<li class="active"><a href="#mycourses" data-toggle="tab">My Courses</a>
+									<li ><a href="#mycourses" data-toggle="tab">My Courses</a>
 									</li>
-									<li><a href="#other" data-toggle="tab">Other Courses</a>
+									<li class="active"><a href="#other" data-toggle="tab">Other Courses</a>
 									</li>
 								</ul>
 
 								<!-- Tab panes -->
 								<div class="tab-content"><br>
-									<form class="navbar-form">
-										<div class="form-group">
-										  <input type="text" placeholder="Search for..." class="form-control">
-										</div>
-									</form>
+
 									<?php
 
 								$t=date('d-m-Y');
@@ -142,7 +138,7 @@
 								$result1 = mysqli_query($conn,$sql);
 
                  ?>
-									<div class="tab-pane fade in active" id="mycourses">
+									<div class="tab-pane fade " id="mycourses">
 										<table class="table table-scroll table-striped">
 											<thead>
 												<tr>
@@ -168,11 +164,33 @@
                   $t=date('d-m-Y');
                   $p=date("D",strtotime($t));
                   require ("database.php");
-                  $sql="Select distinct T.CourseOrder,T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseOrder,c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID is NULL ORDER by CourseName";
+                  $sql="Select distinct T.CourseOrder,T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseOrder,c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID !='".$IuserID."' or T.UserID is NULL  ORDER by CourseName";
                   $result1 = mysqli_query($conn,$sql);
 
                    ?>
-									<div class="tab-pane fade" id="other">
+									<div class="tab-pane fade in active" id="other">
+                    <?php
+
+                    $t=date('d-m-Y');
+                    $p=date("D",strtotime($t));
+                    require ("database.php");
+                    $sql="Select distinct T.CourseCode from (Select distinct c.CourseOrder,c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID !='".$IuserID."' or T.UserID is NULL  ORDER by CourseName";
+                    $result2 = mysqli_query($conn,$sql);
+
+                     ?>
+                    <form>
+                    &nbsp;   &nbsp;   &nbsp;  Find course code: &nbsp;
+                    <select name="users" onchange="showUser(this.value)">
+                      <?php while ($othercourses = mysqli_fetch_object($result2)){?>
+                      <option value="<?php echo $othercourses->CourseCode;?>"><?php echo $othercourses->CourseCode;?></option>
+
+                      <?php } ?>
+                    </select>
+                        </form>
+
+                      <br>
+                      <div class="panel-body" id="txtHint">
+
 										<table class="table table-scroll table-striped">
 											<thead>
 												<tr>
@@ -192,6 +210,7 @@
                              <?php } ?>
 											</tbody>
 										</table>
+                  </div>
 									</div>
 								</div>
 							</div>
@@ -231,7 +250,8 @@
                     <ul class="dropdown-menu">
                         <li><a href="DownloadFileAdminWLAP.php?down=<?php echo $weeks->FileName;?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
                       <li><a data-toggle="modal" data-target="#modal_upload<?php echo $weeks->FileName;?>" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
-                      <li><a data-toggle="modal" data-target="#modal_remarks" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
+                      <li><a data-toggle="modal" data-target="#modal_remarks<?php echo $weeks->Week_num_for_WLAP;?>" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
+                      <li><a data-toggle="modal" data-target="#modal_view<?php echo $weeks->Week_num_for_WLAP;?>" id="vrem"><i class="fa fa-eye fa-fw"></i>View Remarks</a></li>
                     </ul>
                   </span>
                   <?php } ?>
@@ -248,22 +268,7 @@
 							</div>
 							<!-- /.panel-heading -->
 
-							<div class="panel-body" style="overflow-y:auto; height:415px;">
-								<!-- Tab panes -->
-								<div class="tab-content">
-									<div class="list-group">
-										<span href="#" class="list-group-item">
-											<a data-toggle="modal" data-target="#modal_viewWLAP" id="week">Week 1</a>
-											<a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-												<i class="fa fa-cog fa-fw"></i><i class="fa fa-caret-down fa-fw"></i>
-											</a>
-											<ul class="dropdown-menu">
-												<li><a onclick="" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
-											</ul>
-										</span>
-									</div>
-								</div>
-							</div>
+
 							<!-- /.panel-body -->
 						</div>
 						<!-- /.panel -->
@@ -293,7 +298,7 @@
 						  <h4 class="modal-title"><?php echo $course->CourseCode ?> - Week <?php echo $course->Week_num_for_WLAP;?></h4>
 						</div>
 						<div class="modal-body">
-							<div id="pdf-container"></div>
+							<div id="pdf-container<?php echo $course->Week_num_for_WLAP;?>"></div>
 						</div>
 					  </div>
 					</div>
@@ -302,49 +307,94 @@
 			</div>
 				<!-- /#Popup window -->
 
-  			<?php
-              $courseorder=$_GET['id'];
-              require ("database.php");
-              $sql="Select CourseCode from course WHERE CourseOrder = '".$courseorder."'";
-              $result2 = mysqli_query($conn,$sql);
-            ?>
-				<!-- Popup view of WLAP -->
-				<div class="modal fade" id="modal_remarks" role="dialog">
-					<div class="modal-dialog">
-					  <!-- Modal content-->
-					  <div class="modal-content">
-						<div class="modal-header">
-              <?php
-              while ($course = mysqli_fetch_object($result2)){?>
-  						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-  						  <h4 class="modal-title"><?php echo $course->CourseCode; ?>- Week 1 Remarks</h4>
-              <?php }?>
-						</div>
-						<div class="modal-body" style="height: 350px;"><br>
-							<div class="form-group">
-								Add remarks here:
-								<textarea class="form-control" rows="6" id="comment"></textarea>
-							</div>
+                          <?php
+                          $courseorder=$_GET['id'];
+                          require ("database.php");
+                          $sql="Select file.FileName ,file.FileID, course.CourseOrder ,file.CourseCode, file.Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE CourseOrder = '".$courseorder."' AND file.FileClass='WLAP' AND file.Status = 'Approved'";
+                          $result2 = mysqli_query($conn,$sql);
+                           ?>
+                				<!-- Popup view of WLAP -->
+                        <?php
+                        while ($course = mysqli_fetch_object($result2)){?>
+                				<div class="modal fade" id="modal_remarks<?php echo $course->Week_num_for_WLAP;?>" role="dialog">
+                					<div class="modal-dialog">
+                					  <!-- Modal content-->
+                					  <div class="modal-content">
+                						<div class="modal-header">
+                  						  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  						  <h4 class="modal-title"><?php echo $course->CourseCode; ?>- Week <?php echo $course->Week_num_for_WLAP;?> Remarks</h4>
+                						</div>
+                              <form action ="submitprof.php?fileid=<?php echo $course->FileID; ?>&courseorder=<?php echo $course->CourseOrder; ?>" method="post" class="form" role="form">
+                						<div class="modal-body" style="height: 350px;"><br>
+                							<div class="form-group">
+                								Add remarks here:
+                								<textarea name="textremarks" class="form-control" rows="6" id="comment"></textarea>
+                							</div>
 
-							<span class="pull-right" style="margin-top:-20px;">
-								<button href="facHome.php" class="btn btn-sub"><b>Submit</b></button>
-							</span>
-							<?php
-						date_default_timezone_set('asia/manila');
-						$date=date('d-m-Y');
-						$time = date("h:i");
-						?>
-							<span class="pull-left text-muted small" style="display:block;">
-									Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
-							</span>
-						</div>
-						<!-- /#modal-body -->
-					  </div>
-					  <!-- /#modal-content -->
-					</div>
-				</div>
+                							<span class="pull-right" style="margin-top:-20px;">
+                								<button  type="Submit"  class="btn btn-sub" name="remarksother"><b>Submit</b></button>
+                							</span>
+                							<?php
+                						date_default_timezone_set('asia/manila');
+                						$date=date('d-m-Y');
+                						$time = date("h:i");
+                						?>
+                							<span class="pull-left text-muted small" style="display:block;">
+                									Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
+                							</span>
+                						</div>
+                          </form>
+
+                						<!-- /#modal-body -->
+                					  </div>
+                					  <!-- /#modal-content -->
+                					</div>
+                				</div>
+                      <?php }?>
 				<!-- /#Popup window -->
+        <?php
+        $courseorder=$_GET['id'];
+        require ("database.php");
+        $sql="Select file.FileName ,file.FileID, course.CourseOrder ,file.CourseCode, file.Week_num_for_WLAP,remarks.Remarks,remarks.Time_Added,remarks.Date_Added from file INNER JOIN course ON file.CourseCode=course.CourseCode LEFT JOIN remarks on file.FileID =remarks.FileID WHERE CourseOrder = '".$courseorder."' AND file.FileClass='WLAP' AND file.Status = 'Approved'";
+        $result2 = mysqli_query($conn,$sql);
+         ?>
+      <!-- Popup view of WLAP -->
+      <?php
+      while ($course = mysqli_fetch_object($result2)){?>
+      <div class="modal fade" id="modal_view<?php echo $course->Week_num_for_WLAP;?>" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title"><?php echo $course->CourseCode; ?>- Week <?php echo $course->Week_num_for_WLAP;?> Remarks</h4>
+          </div>
+            <form  class="form" role="form">
+          <div class="modal-body" style="height: 350px;"><br>
+            <div class="form-group">
+              Your remarks : <br> <br>
+              <?php echo $course->Remarks;?>
 
+            </div>
+<br> <br>
+
+            <?php
+          date_default_timezone_set('asia/manila');
+          $date=date('d-m-Y');
+          $time = date("h:i");
+          ?>
+            <span class="pull-left text-muted small" style="display:block;">
+                Added last <?php echo $course->Time_Added;?>  | <?php echo $course->Date_Added;?>
+            </span>
+          </div>
+        </form>
+
+          <!-- /#modal-body -->
+          </div>
+          <!-- /#modal-content -->
+        </div>
+      </div>
+          <?php }?>
 				<!-- Footer -->
 				<footer class="text-center">
 					<div class="footer-below">
@@ -441,7 +491,7 @@
 		<?php
 		          $courseorder=$_GET['id'];
 		          require ("database.php");
-		          $sql="Select FileName, Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."' AND file.FileClass='WLAP'";
+		          $sql="Select FileName, Week_num_for_WLAP from file INNER JOIN course ON file.CourseCode=course.CourseCode WHERE course.CourseOrder = '".$courseorder."' AND file.FileClass='WLAP' AND file.Status = 'Approved'";
 		          $result3 = mysqli_query($conn,$sql);
         ?>
 
@@ -450,6 +500,29 @@
 						PDFObject.embed(<?php echo "\"pdf/WLAP/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->Week_num_for_WLAP;?>");
 		<?php }?>
 		</script>
+    <script>
+function showUser(str) {
+    if (str == "") {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else {
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET","getcourse.php?q="+str,true);
+        xmlhttp.send();
+    }
+}
+</script>
 
 	</body>
 

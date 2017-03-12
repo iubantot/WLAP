@@ -104,15 +104,30 @@
 								<i class="fa fa-calendar fa-fw"></i> Schedule
 							</div>
 							<!-- /.panel-heading -->
+              <br>
 
-							<div class="panel-body">
+              <div>
+                <form>
+                &nbsp;   &nbsp;   &nbsp;  Find course code: &nbsp;
+                <select name="users" onchange="showUser(this.value)">
 
-								<form class="navbar-form">
-									<div class="form-group">
-										<input type="text" placeholder="Search for..." class="form-control">
-									</div>
-								</form>
-								<?php
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thursday">Thursday</option>
+                  <option value="Friday">Friday</option>
+                  <option value="Saturday">Saturday</option>
+
+
+                </select>
+                    </form>
+              </div>
+
+							<div class="panel-body" id="txtHint">
+
+
+
+                                <?php
 
                 $t=date('d-m-Y');
                 $p=date("D",strtotime($t));
@@ -201,12 +216,12 @@
 							<div class="panel-body" style="overflow-y:auto; height:176px;">
 								<?php
 							require ("database.php");
-							$sql="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (user.UserID != '".$IuserID."') ORDER BY file.DateUpload ASC  ";
+							$sql="SELECT file.CourseCode,file.Week_num_for_WLAP, file.DateUpload, file.TimeUpload,file.FileClass, user.Username FROM file INNER JOIN user on user.UserID = file.UserID WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (user.UserID != '".$IuserID."') ORDER BY file.DateUpload ASC";
 							$result1 = mysqli_query($conn,$sql);
 							 ?>
                <?php
              require ("database.php");
-             $sql1="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, user.Username, user.userID ,file.Status FROM file INNER JOIN user on user.UserID = file.UserID  WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (user.UserID = '".$IuserID."') ORDER BY file.DateUpload ASC  ";
+             $sql1="SELECT file.CourseCode, file.Week_num_for_WLAP ,file.DateUpload,file.FileClass , file.TimeUpload, user.Username, user.userID ,file.Status FROM file INNER JOIN user on user.UserID = file.UserID  WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (user.UserID = '".$IuserID."') ORDER BY file.DateUpload ASC  ";
              $result2 = mysqli_query($conn,$sql1);
 
               ?>
@@ -214,16 +229,16 @@
 
 									<?php while ($notification = mysqli_fetch_object($result1)){?>
                     <span href="#" class="list-group-item">
-										<a data-toggle="modal" data-target="#modal_viewWLAP" id="coursecode">
+										<a data-toggle="modal" data-target="#modal_viewWLAP<?php echo $notification->Week_num_for_WLAP; echo $notification->CourseCode;echo $notification->FileClass;?>" id="coursecode">
 
                       <i class="fa fa-file-text-o fa-fw"></i>&nbsp;<?php echo $notification->CourseCode;?></a><br>
-  										<span class="pull-left text-muted small">Revised by: <em id="faculty"><?php echo $notification->Username;?></em></span>
+  										<span class="pull-left text-muted small">Revised by: &nbsp; <em id="faculty"><?php echo $notification->Username;?></em></span> &nbsp;
   										<span class="pull-right text-muted small" id="datetime"><?php echo $notification->DateUpload;?> | <?php echo $notification->TimeUpload;?></span>
                             </span>
                   <?php } ?>
                   <?php while ($notification2 = mysqli_fetch_object($result2)){?>
                     <span href="#" class="list-group-item">
-                    <a data-toggle="modal" data-target="#modal_viewWLAP" id="coursecode">
+                    <a data-toggle="modal" data-target="#modal_viewWLAP<?php echo $notification2->Week_num_for_WLAP; echo $notification2->CourseCode;echo $notification2->FileClass;?>" id="coursecode">
                       <i class="fa fa-file-text-o fa-fw"></i>&nbsp;<?php echo $notification2->CourseCode;?></a><br>
                       <span class="pull-left text-muted small">Status: <em id="faculty"><?php echo $notification2->Status;?></em></span>
                       <span class="pull-right text-muted small" id="datetime"><?php echo $notification2->DateUpload;?> | <?php echo $notification2->TimeUpload;?></span>
@@ -242,22 +257,56 @@
 				<!-- /.row -->
 
 				<!-- Popup for viewing WLAP -->
-				<div class="modal fade" id="modal_viewWLAP" role="dialog">
-					<div class="modal-dialog">
+				<?php
+		          require ("database.php");
+				  $sql="SELECT file.CourseCode, file.Week_num_for_WLAP, file.DateUpload,file.FileClass, file.TimeUpload, user.Username, user.userID ,file.Status FROM file INNER JOIN user on user.UserID = file.UserID  WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (user.UserID = '".$IuserID."') ORDER BY file.DateUpload ASC ";
+		          $result5 = mysqli_query($conn,$sql);
+				  $sql1="SELECT file.CourseCode, file.Week_num_for_WLAP, file.DateUpload,file.FileClass, file.TimeUpload, user.Username, user.userID ,file.Status FROM file INNER JOIN user on user.UserID = file.UserID  WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (user.UserID != '".$IuserID."') ORDER BY file.DateUpload ASC ";
+				  $result6 = mysqli_query($conn,$sql1);
+         	  ?>
+
+				<!-- Popup for remarks -->
+
+			<div class="container-pdf">
+	<?php while ($notification3 = mysqli_fetch_object($result5)){?>
+				<div class="modal fade" id="modal_viewWLAP<?php echo $notification3->Week_num_for_WLAP; echo $notification3->CourseCode;echo $notification3->FileClass;?>" role="dialog">
+					<div class="modal-dialog modal-lg">
 					  <!-- Modal content-->
 					  <div class="modal-content">
 						<div class="modal-header">
 						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-						  <h4 class="modal-title" id="coursecode">COE 002A</h4>
-						  Revised by:&nbsp;<em id="faculty" style="color:#d9d9d9;">arvillanueva</em> on
-						  <em id="datetime" style="color:#d9d9d9;">Jan. 28 | 1:02PM</em>
+						  <h4 class="modal-title"><?php echo $notification3->CourseCode ?>- Week <?php echo $notification3->Week_num_for_WLAP;?></h4>
+						  Revised by:&nbsp;<em id="faculty" style="color:#d9d9d9;"><?php echo $notification3->Username;?></em> on
+						  <em id="datetime" style="color:#d9d9d9;"><?php echo $notification3->DateUpload;?> | <?php echo $notification3->TimeUpload;?></em>
 						</div>
 						<div class="modal-body">
-							...
+							<div id="pdf-container<?php echo $notification3->Week_num_for_WLAP; echo $notification3->CourseCode;echo $notification3->FileClass;?>"></div>
 						</div>
 					  </div>
 					</div>
 				</div>
+				<?php }?>
+
+	<?php while ($notification3 = mysqli_fetch_object($result6)){?>
+				<div class="modal fade" id="modal_viewWLAP<?php echo $notification3->Week_num_for_WLAP; echo $notification3->CourseCode;echo $notification3->FileClass;?>" role="dialog">
+					<div class="modal-dialog modal-lg">
+					  <!-- Modal content-->
+					  <div class="modal-content">
+						<div class="modal-header">
+						  <button type="button" class="close" data-dismiss="modal">&times;</button>
+						  <h4 class="modal-title"><?php echo $notification3->CourseCode ?>- Week <?php echo $notification3->Week_num_for_WLAP;?></h4>
+						  Revised by:&nbsp;<em id="faculty" style="color:#d9d9d9;"><?php echo $notification3->Username;?></em> on
+						  <em id="datetime" style="color:#d9d9d9;"><?php echo $notification3->DateUpload;?> | <?php echo $notification3->TimeUpload;?></em>
+						</div>
+						<div class="modal-body">
+							<div id="pdf-container<?php echo $notification3->Week_num_for_WLAP; echo $notification3->CourseCode; echo $notification3->FileClass;?>"></div>
+						</div>
+					  </div>
+					</div>
+				</div>
+				<?php }?>
+			</div>
+
 				<!-- /#Popup window -->
 
 				<!-- Popup for changing photo -->
@@ -309,7 +358,60 @@
 		<!-- Custom Theme JavaScript -->
 		<script src="js/sb-admin-2.js"></script>
 
+		 <!-- PDFObject JavaScript -->
+		<script src="js/pdfobject.min.js"></script>
+
 		<script src="js/customJS.js"></script>
+
+		<?php
+		          require ("database.php");
+		          $sql1="SELECT file.CourseCode, file.FileName, file.Week_num_for_WLAP,file.DateUpload,file.FileClass, file.TimeUpload, user.Username, user.userID ,file.Status FROM file INNER JOIN user on user.UserID = file.UserID  WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (user.UserID = '".$IuserID."' AND file.FileClass='Syllabus') ORDER BY file.DateUpload ASC ";
+		          $result1 = mysqli_query($conn,$sql1);
+				  $sql2="SELECT file.CourseCode, file.FileName, file.Week_num_for_WLAP,file.DateUpload,file.FileClass, file.TimeUpload, user.Username, user.userID ,file.Status FROM file INNER JOIN user on user.UserID = file.UserID  WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (user.UserID = '".$IuserID."' AND file.FileClass='WLAP') ORDER BY file.DateUpload ASC ";
+				  $result2 = mysqli_query($conn,$sql2);
+				  $sql3="SELECT file.CourseCode, file.FileName, file.Week_num_for_WLAP,file.DateUpload,file.FileClass, file.TimeUpload, user.Username, user.userID ,file.Status FROM file INNER JOIN user on user.UserID = file.UserID  WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (user.UserID != '".$IuserID."'AND file.FileClass='Syllabus') ORDER BY file.DateUpload ASC ";
+				  $result3 = mysqli_query($conn,$sql3);
+				  $sql4="SELECT file.CourseCode, file.FileName, file.Week_num_for_WLAP,file.DateUpload,file.FileClass, file.TimeUpload, user.Username, user.userID ,file.Status FROM file INNER JOIN user on user.UserID = file.UserID  WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND (user.UserID != '".$IuserID."'AND file.FileClass='WLAP') ORDER BY file.DateUpload ASC ";
+				  $result4 = mysqli_query($conn,$sql4);
+        ?>
+
+		<script>
+		<?php while ($pdf = mysqli_fetch_object($result1)){?>
+						PDFObject.embed(<?php echo "\"pdf/Syllabus/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->Week_num_for_WLAP; echo $pdf->CourseCode;echo $pdf->FileClass;?>");
+		<?php }?>
+		<?php while ($pdf = mysqli_fetch_object($result2)){?>
+						PDFObject.embed(<?php echo "\"pdf/WLAP/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->Week_num_for_WLAP; echo $pdf->CourseCode;echo $pdf->FileClass;?>");
+		<?php }?>
+		<?php while ($pdf = mysqli_fetch_object($result3)){?>
+						PDFObject.embed(<?php echo "\"pdf/Syllabus/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->Week_num_for_WLAP; echo $pdf->CourseCode;echo $pdf->FileClass;?>");
+		<?php }?>
+		<?php while ($pdf = mysqli_fetch_object($result4)){?>
+						PDFObject.embed(<?php echo "\"pdf/WLAP/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->Week_num_for_WLAP; echo $pdf->CourseCode;echo $pdf->FileClass;?>");
+		<?php }?>
+		</script>
+    <script>
+function showUser(str) {
+    if (str == "") {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else {
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET","getuser.php?q="+str,true);
+        xmlhttp.send();
+    }
+}
+</script>
 
 	</body>
 

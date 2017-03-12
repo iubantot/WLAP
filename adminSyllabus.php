@@ -33,6 +33,18 @@
 				width:100%;
 				height: calc(100vh - 155px);
 			}
+      .btnPos {
+              padding-left: 100px;
+              padding-right: 100px;
+              padding-bottom: 20px;
+              text-align:center;
+            }
+            .inputFile {
+              position: absolute;
+              opacity: 0;
+            }
+
+
 		</style>
 
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -92,7 +104,10 @@
 			<div id="page-wrapper">
 				<div class="row">
 					<div class="col-lg-12">
-						<h2 class="page-header">Syllabus</h1>
+						<h2 class="page-header">Syllabus</h>
+              <span class="pull-right" style="margin-top:-20px;">
+              <button type="submit" name="submitbtn" class="btn btn-sub" data-toggle="modal" data-target="#modal_upload" id="up">Add Syllabus</button>
+              </span>
 					</div>
 					<!-- /.col-lg-12 -->
 				</div>
@@ -102,6 +117,7 @@
 						<div class="panel panel-green">
 							<div class="panel-heading">
 								<i class="fa fa-search fa-fw"></i>&nbsp; Search Syllabus
+
 							</div>
 							<!-- /.panel-heading -->
 							<div class="panel-body">
@@ -115,11 +131,7 @@
 
 								<!-- Tab panes -->
 								<div class="tab-content"><br>
-									<form class="navbar-form">
-										<div class="form-group">
-										  <input type="text" placeholder="Search for..." class="form-control">
-										</div>
-									</form>
+
                   <?php
 								$t=date('d-m-Y');
 								$p=date("D",strtotime($t));
@@ -158,10 +170,32 @@
                   $t=date('d-m-Y');
                   $p=date("D",strtotime($t));
                   require ("database.php");
-                  $sql="Select distinct T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID is NULL ORDER by CourseName";
+                  $sql="Select distinct T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID !='".$IuserID."' or T.UserID is NULL  ORDER by CourseName";
                   $result1 = mysqli_query($conn,$sql);
                    ?>
 									<div class="tab-pane fade" id="other">
+                    <?php
+
+                    $t=date('d-m-Y');
+                    $p=date("D",strtotime($t));
+                    require ("database.php");
+                    $sql="Select distinct T.CourseCode from (Select distinct c.CourseOrder,c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID !='".$IuserID."' or T.UserID is NULL  ORDER by CourseName";
+                    $result2 = mysqli_query($conn,$sql);
+
+                     ?>
+                    <form>
+                    &nbsp;   &nbsp;   &nbsp;  Find course code: &nbsp;
+                    <select name="users" onchange="showUser(this.value)">
+                      <?php while ($othercourses = mysqli_fetch_object($result2)){?>
+                      <option value="<?php echo $othercourses->CourseCode;?>"><?php echo $othercourses->CourseCode;?></option>
+
+                      <?php } ?>
+                    </select>
+                        </form>
+
+                      <br>
+                    <div class="panel-body" id="txtHint">
+
 										<table class="table table-scroll table-striped">
 											<thead>
 												<tr>
@@ -179,12 +213,13 @@
 														<a data-toggle="modal" data-target="#modal_viewSyllabus<?php echo $othercourses->CourseCode;?>" id="down"><?php echo $othercourses->CourseName;?></a>
 													</td>
 													<td>
-                            	<a href="DownloadFileAdminSylab.php?down=<?php echo $othercourses->CourseCode;?>_Syllabus.pdf" id="down">Download</a> | <a data-toggle="modal" data-target="#modal_upload" id="up">Upload</a>
+                            	<a href="DownloadFileAdminSylab.php?down=<?php echo $othercourses->CourseCode;?>_Syllabus.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a>
 													</td>
 												</tr>
                         <?php } ?>
 											</tbody>
 										</table>
+                  </div>
 									</div>
 								</div>
 							</div>
@@ -254,6 +289,31 @@
 				</div>
 		<?php }?>
 			</div>
+      <!-- Popup view of Syllabus -->
+      <div class="container-pdf">
+  <?php while ($course = mysqli_fetch_object($result2)){?>
+        <div class="modal fade" id="modal_viewSyllabus1<?php echo $course->CourseCode ?>" role="dialog">
+          <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+            <div class="modal-header">
+
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title"><?php echo $course->CourseCode ?> - Syllabus</h4>
+            </div>
+            <div class="modal-body">
+              <div id="pdf-container<?php echo $course->CourseCode?>"></div> <!--contrainer for view pdf -->
+            </div>
+
+            <!-- /#modal-body -->
+          </div>
+            <!-- /#modal-content -->
+        </div>
+      </div>
+  <?php }?>
+    </div>
+
+
 				<!-- /#Popup window -->
 
 				<!-- Footer -->
@@ -269,7 +329,77 @@
 					</div>
 				</footer>
 
-      </div>
+
+          <!-- Popup view of Upload -->
+
+          <div class="modal fade" id="modal_upload" role="dialog">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Add Syllabus</h4>
+              </div>
+              <div class="modal-body" style="height: 550px;"><br>
+                  <form action="UploadFileProcSyllabus.php" method="post" enctype="multipart/form-data">
+                    <h3>Add a new Syllabus</h3>
+                    Course:&nbsp;
+                    <?php
+                    require ("database.php");
+                    $sql="Select T.CourseCode,T.FileClass from (Select c.CourseCode,f.FileClass from file f RIGHT JOIN course c ON c.CourseCode = f.CourseCode WHERE f.FileClass='Syllabus' OR f.FileClass is NULL )AS T WHERE T.FileClass is NULL ORDER by T.CourseCode ";
+                    $course = mysqli_query($conn,$sql);
+
+                    ?>
+                    <select class="form-control" id="courseCode" name="code" style="width:125px;" >
+<?php while ($coursecode = mysqli_fetch_object($course)){?>
+
+
+                      <option><?php echo  $coursecode->CourseCode; ?> </option>
+
+
+                        <?php } ?>
+                      </select> <br>
+                    <div class="btnPos">
+                  <label class="btn btn-sub">
+                    <span id="input-value">Choose file</span>
+                    <input type="file" name="fileUpload" class="inputFile" id="inFile"/>
+                  </label>
+                </div>
+                  <span class="pull-right" style="margin-top:-20px;">
+                  <button type="submit" name="submitbtn" class="btn btn-sub">Upload</button>
+                  </span>
+                  </form>
+                  <script>
+                    document.getElementById('inFile').addEventListener('change', function(){
+                      myFunction();
+                    });
+                    function myFunction(){
+                        var inputVal = document.getElementById('inFile').value;
+                        document.getElementById('input-value').innerHTML=inputVal.substr(12);
+                    }
+                  </script>
+
+                  <br> <br><p>The format of the file should be pdf.</p>
+                  <p>The file will be renamed as (CourseCode)_Syllabus.pdf</p>
+                  <?php
+                  date_default_timezone_set('asia/manila');
+                  $date=date('d-m-Y');
+                  $time = date("h:i");
+                  ?>
+                  <span class="pull-left text-muted small" style="display:block;">
+                      Added on <?php echo date('h:i A', strtotime($time))?>  | <?php echo date('F d Y', strtotime($date));?>
+                  </span>
+              </div>
+              <!-- /#modal-body -->
+              </div>
+              <!-- /#modal-content -->
+
+          </div>
+        </div>
+
+          <!-- /#Popup window -->
+
+
 			<!--/#page-wrapper -->
 		</div>
 		<!-- /#wrapper -->
@@ -316,6 +446,29 @@
                 PDFObject.embed(<?php echo "\"pdf/Syllabus/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->CourseCode;?>");
         <?php }?>
         </script>
+        <script>
+    function showUser(str) {
+        if (str == "") {
+            document.getElementById("txtHint").innerHTML = "";
+            return;
+        } else {
+            if (window.XMLHttpRequest) {
+                // code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                // code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("txtHint").innerHTML = this.responseText;
+                }
+            };
+            xmlhttp.open("GET","getsyllabus.php?q="+str,true);
+            xmlhttp.send();
+        }
+    }
+    </script>
 
 	</body>
 

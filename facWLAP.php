@@ -105,11 +105,11 @@
 
 								<!-- Tab panes -->
 								<div class="tab-content"><br>
-									<form class="navbar-form">
+
 										<div class="form-group">
-										  <input type="text" placeholder="Search for..." class="form-control">
+
 										</div>
-									</form>
+
 									<?php
 
 								$t=date('d-m-Y');
@@ -140,16 +140,37 @@
 											</tbody>
 										</table>
 									</div>
-									<?php
+                  <?php
 
                   $t=date('d-m-Y');
                   $p=date("D",strtotime($t));
                   require ("database.php");
-                  $sql="Select distinct T.CourseOrder,T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseOrder,c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID is NULL ORDER by CourseName";
+                  $sql="Select distinct T.CourseOrder,T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseOrder,c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID !='".$IuserID."' or T.UserID is NULL   ORDER by CourseName";
                   $result1 = mysqli_query($conn,$sql);
 
                    ?>
 									<div class="tab-pane fade" id="other">
+                    <?php
+
+                    $t=date('d-m-Y');
+                    $p=date("D",strtotime($t));
+                    require ("database.php");
+                    $sql="Select distinct T.CourseCode from (Select distinct c.CourseOrder,c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID !='".$IuserID."' or T.UserID is NULL  ORDER by CourseName";
+                    $result2 = mysqli_query($conn,$sql);
+
+                     ?>
+                    <form>
+                    &nbsp;   &nbsp;   &nbsp;  Find course code: &nbsp;
+                    <select name="users" onchange="showUser(this.value)">
+                      <?php while ($othercourses = mysqli_fetch_object($result2)){?>
+                      <option value="<?php echo $othercourses->CourseCode;?>"><?php echo $othercourses->CourseCode;?></option>
+
+                      <?php } ?>
+                    </select>
+                        </form>
+
+                      
+                      <div class="panel-body" id="txtHint">
 										<table class="table table-scroll table-striped">
 											<thead>
 												<tr>
@@ -169,6 +190,7 @@
                              <?php } ?>
 											</tbody>
 										</table>
+                  </div>
 									</div>
 								</div>
 							</div>
@@ -311,6 +333,29 @@
 		<!-- /#wrapper -->
 
 		 <!-- jQuery -->
+     <script>
+ function showUser(str) {
+     if (str == "") {
+         document.getElementById("txtHint").innerHTML = "";
+         return;
+     } else {
+         if (window.XMLHttpRequest) {
+             // code for IE7+, Firefox, Chrome, Opera, Safari
+             xmlhttp = new XMLHttpRequest();
+         } else {
+             // code for IE6, IE5
+             xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+         }
+         xmlhttp.onreadystatechange = function() {
+             if (this.readyState == 4 && this.status == 200) {
+                 document.getElementById("txtHint").innerHTML = this.responseText;
+             }
+         };
+         xmlhttp.open("GET","getfaccourse.php?q="+str,true);
+         xmlhttp.send();
+     }
+ }
+ </script>
 		<script src="js/jquery.min.js"></script>
 
 		<!-- Bootstrap Core JavaScript -->
@@ -323,7 +368,7 @@
 		<script src="js/sb-admin-2.js"></script>
 
 		<script src="js/customJS.js"></script>
-    
+
 	</body>
 
 </html>

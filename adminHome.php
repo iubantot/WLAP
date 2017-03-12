@@ -98,11 +98,7 @@
 
 							<div class="panel-body">
 
-								<form class="navbar-form">
-									<div class="form-group">
-										<input type="text" placeholder="Search for..." class="form-control">
-									</div>
-								</form>
+								
                 <?php
 
                 $t=date('d-m-Y');
@@ -157,11 +153,17 @@
 							<div class="panel-body" style="overflow-x:auto; height:178px;">
 								<div class="tab-pane fade in active" id="profile">
 									<div class="row">
-										<div class="col-lg-6">
-											<a id="docPhoto"><img class="img-thumbnail" src="img/black.png"></a>
-											<a data-toggle="modal" data-target="#modal_changePhoto" style="float:right;" id="changePhoto"><i class="fa fa-pencil fa-fw"></i> Change Photo</a>
-										</div>
-
+                    <?php
+                  require ("database.php");
+                  $sql="SELECT ImageName from user where UserID = '".$IuserID."'";
+                  $picture = mysqli_query($conn,$sql);
+                   ?>
+                    <div class="col-lg-6">
+<?php while ($pictureofuser = mysqli_fetch_object($picture)){?>
+                      <a id="docPhoto"><img class="img-thumbnail" src="<?php echo $pictureofuser->ImageName;?>"></a>
+                      <a href="adminUpload.php" style="float:right;" id="changePhoto"><i class="fa fa-pencil fa-fw"></i> Change Photo</a>
+                    </div>
+  <?php } ?>
 										<div class="col-lg-6" id="viewProfile" style="margin-top: -20px;">
 											<form role="form"><br>
                         <h5 id="fullName"><?php echo  $vFirstName; ?> <?php echo  $vMiddleName; ?>. <?php echo  $vLastName; ?></h5>
@@ -254,41 +256,46 @@
 					</div>
 				</div>
 				<!-- /#Popup window -->
+        <?php
+      require ("database.php");
+      $sql="SELECT file.FileID,file.CourseCode,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE file.Status = 'Pending' ORDER BY file.DateUpload ASC  ";
+      $result8 = mysqli_query($conn,$sql);
+
+       ?>
 
 				<!-- Popup for viewing notifications -->
-				<div class="modal fade" id="modal_viewNotif" role="dialog">
+        <div class="modal fade" id="modal_viewNotif" role="dialog">
 					<div class="modal-dialog">
 					  <!-- Modal content-->
-					  <div class="modal-content" style="width:500px;">
+
+            <div class="modal-content" style="width:500px;">
 						<div class="modal-header">
 						  <button type="button" class="close" data-dismiss="modal">&times;</button>
 						  <h4 class="modal-title">Notifications</h4>
 						</div>
 						<div class="modal-body" style="width:500px;">
-              <?php
-            require ("database.php");
-            $sql="SELECT file.CourseCode,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE (file.DateUpload > DATE_SUB(CURDATE(), INTERVAL 7 DAY) or file.DateUpload = CURDATE()) AND file.Status = 'For Review' ORDER BY file.DateUpload ASC";
-            $result1 = mysqli_query($conn,$sql);
-
-             ?>
 							<div class="list-group" style="height:165px;">
-                <?php while ($notification = mysqli_fetch_object($result1)){?>
+                <?php while ($notification = mysqli_fetch_object($result8)){?>
 								<span href="#" class="list-group-item" style="height:90px;">
 									<div class="col-lg-8" style="margin-left:-20px;">
 										<a data-dismiss="modal" data-toggle="modal" data-target="#modal_viewWLAP" id="coursecode">
+                      <span hidden class="pull-left text-muted small" style="display:hidden;" ><em id="faculty" name="FileID" ><?php echo $notification->FileID;?></em></span>
 										<i class="fa fa-file-text-o fa-fw"></i>&nbsp;<?php echo $notification->CourseCode;?></a><br>
-                    <span class="pull-left text-muted small" style="margin-top:25px;">Revised by: <em id="faculty"><?php echo $notification->Username;?></em></span><br>
-                    <span class="pull-left text-muted small">Uploaded on: <em><?php echo $notification->DateUpload;?> | <?php echo $notification->TimeUpload;?></em></span>
-
+										<span class="pull-left text-muted small" style="margin-top:25px;">Revised by: <em id="faculty"><?php echo $notification->Username;?></em></span><br>
+										<span class="pull-left text-muted small">Uploaded on: <em><?php echo $notification->DateUpload;?> | <?php echo $notification->TimeUpload;?></em></span>
 									</div>
 									<div class="col-lg-4" style="margin:-12px 0 0 20px;">
-										<button class="btn btn-sub" style="width:100%; margin-bottom:-10px;"><i class="fa fa-check"></i> Approve</button><br>
-										<button class="btn btn-sub" style="width:100%;"><i class="fa fa-times"></i> Reject</button>
+										<button class="btn btn-sub" style="width:100%; margin-bottom:-10px;"><i class="fa fa-check"></i><a href="approve.php?id=<?php echo $notification->FileID;?>"> Approve</a></button><br>
+										<button class="btn btn-sub" style="width:100%;"><i class="fa fa-times"></i><a href="reject.php?id=<?php echo $notification->FileID;?>"> Reject</a></button>
 									</div>
 								</span>
-                  <?php } ?>
+                <?php } ?>
 							</div>
 							<!-- /.list-group -->
+
+
+
+
 						</div>
 					  </div>
 					</div>

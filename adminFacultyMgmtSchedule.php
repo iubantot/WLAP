@@ -151,11 +151,7 @@
 							<!-- /.panel-heading -->
 							<div class="panel-body">
 								<!-- Tab panes -->
-								<form class="navbar-form">
-									<div class="form-group">
-									  <input type="text" placeholder="Search for..." class="form-control">
-									</div>
-								</form>
+
                 <?php
                 require ("database.php");
                   $UserID=$_GET['userid'];
@@ -178,7 +174,9 @@
 									<tbody>
                     <?php while ($schedule = mysqli_fetch_object($result4)){?>
 											<tr>
-												<td id="code"><?php echo $schedule->CourseCode;?></td>
+                        <td id="code"><?php echo $schedule->CourseCode;?></td>
+									
+
 												<td id="desc"><?php echo $schedule->CourseName;?></td>
 												<td id="sec"><?php echo $schedule->Section;?></td>
 												<td id="day"><?php echo $schedule->ScheduleDay;?></td>
@@ -228,8 +226,45 @@
 					</div>
 				</div>
 				<!-- /#Popup window -->
+        <!-- Popup for remarks -->
 
-				
+                        <?php
+                        require ("database.php");
+                          $UserID=$_GET['userid'];
+                        $sql="Select c.CourseName,s.CourseCode,s.ScheduleDay,s.ScheduleTimeIN,s.ScheduleTimeOUT,s.Section,s.Room from schedule s INNER JOIN course c ON c.CourseCode = s.CourseCode WHERE s.userID = '".$UserID."' ORDER by c.CourseName ";
+                        $result4 = mysqli_query($conn,$sql);
+                         ?>
+                         <?php while ($schedule = mysqli_fetch_object($result4)){?>
+      				<div class="modal fade" id="modal_viewRemarks<?php echo $schedule->CourseCode;?>" role="dialog">
+      					<div class="modal-dialog">
+      					  <!-- Modal content-->
+      					  <div class="modal-content">
+      						<div class="modal-header">
+      						  <button type="button" class="close" data-dismiss="modal">&times;</button>
+      						  <h4 class="modal-title"><?php echo $schedule->CourseCode;?> Remarks</h4>
+      						</div>
+      						<div class="modal-body">
+      							<table class="table table-scroll table-striped">
+      								<thead>
+      									<tr>
+      										<th>WLAP</th>
+      										<th>Remarks</th>
+      									</tr>
+      								</thead>
+
+      								<tbody style="height:470px;">
+      									<tr>
+      										<td><a data-toggle="modal" data-target="#modal_viewWLAP">Week 1</a></td>
+      										<td>This week, blablabla asfdasas asfasfa asfasd asdas asdasd asdasd asd</td>
+      									</tr>
+      								</tbody>
+      							</table>
+      						</div>
+      					  </div>
+      					</div>
+      				</div>
+              <?php } ?>
+
 
 				<!-- Footer -->
 				<footer class="text-center">

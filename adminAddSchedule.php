@@ -51,7 +51,7 @@
 				<!-- /.navbar-header -->
 
 				<ul class="nav navbar-nav navbar-right" style="margin-right:25px;">
-					<li><a href="#"><i class="fa fa-user-circle-o fa-fw"></i>&nbsp;Name here</a></li>
+					<li><a href="#"><i class="fa fa-user-circle-o fa-fw"></i>&nbsp;<?php echo  $vFirstName; ?> <?php echo  $vMiddleName; ?>. <?php echo  $vLastName; ?></a></li>
 				</ul>
 
 				<div class="navbar-default sidebar" role="navigation">

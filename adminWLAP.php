@@ -62,7 +62,7 @@
 								<a href="adminHome.php"><i class="fa fa-3x fa-home fa-fw"></i><br>Home</a>
 							</li>
 							<li>
-								<a href="#"><i class="fa fa-3x fa-calendar-o fa-fw"></i><br>WLAP</a>
+								<a href="adminWLAP.php"><i class="fa fa-3x fa-calendar-o fa-fw"></i><br>WLAP</a>
 							</li>
 							<li>
 								<a href="adminSyllabus.php"><i class="fa fa-3x fa-file-text-o fa-fw"></i><br>Syllabus</a>
@@ -71,7 +71,7 @@
 								<a href="adminFacultyMgmt.php"><i class="fa fa-3x fa-id-card-o fa-fw"></i><br>Faculty</a>
 							</li>
 							<li>
-								<a href="logout.php"><i class="fa fa-3x fa-sign-out fa-fw"></i><br>Logout</a>
+								<a href="adminlogout.php"><i class="fa fa-3x fa-sign-out fa-fw"></i><br>Logout</a>
 							</li>
 
 						</ul>
@@ -107,11 +107,7 @@
 
 								<!-- Tab panes -->
 								<div class="tab-content"><br>
-									<form class="navbar-form">
-										<div class="form-group">
-										  <input type="text" placeholder="Search for..." class="form-control">
-										</div>
-									</form>
+
 									<?php
 
 								$t=date('d-m-Y');
@@ -136,7 +132,7 @@
     										<tr>
     											<td id="code"><?php echo $course->CourseCode;?></td>
     											<td id="desc"><?php echo $course->CourseName;?></td>
-    											<td><a onclick="showWLAPList()" href="adminWLAPcourses.php?id=<?php echo $course->CourseOrder;?>">View list</a></td>
+    											<td><a  href="adminWLAPcourses.php?id=<?php echo $course->CourseOrder;?>">View list</a></td>
     										</tr>
                              <?php } ?>
 											</tbody>
@@ -147,30 +143,53 @@
                   $t=date('d-m-Y');
                   $p=date("D",strtotime($t));
                   require ("database.php");
-                  $sql="Select distinct T.CourseOrder,T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseOrder,c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID is NULL ORDER by CourseName";
+                  $sql="Select distinct T.CourseOrder,T.CourseName,T.CourseCode,T.UserID from (Select distinct c.CourseOrder,c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID !='".$IuserID."' or T.UserID is NULL   ORDER by CourseName";
                   $result1 = mysqli_query($conn,$sql);
 
                    ?>
 									<div class="tab-pane fade" id="other">
-										<table class="table table-scroll table-striped">
-											<thead>
-												<tr>
-													<th>Course Code</th>
-													<th>Descriptive Title</th>
-													<th>Action</th>
-												</tr>
-											</thead>
+                    <?php
 
-											<tbody style="width:80%; height:50%;">
-												<?php while ($othercourses = mysqli_fetch_object($result1)){?>
-    										<tr>
-    											<td id="code"><?php echo $othercourses->CourseCode;?></td>
-    											<td id="desc"><?php echo $othercourses->CourseName;?></td>
-    											<td><a href="adminWLAPothercourses.php?id=<?php echo $othercourses->CourseOrder;?>">View list</a></td>
-    										</tr>
+                    $t=date('d-m-Y');
+                    $p=date("D",strtotime($t));
+                    require ("database.php");
+                    $sql="Select distinct T.CourseCode from (Select distinct c.CourseOrder,c.CourseName,c.CourseCode,s.UserID from schedule s RIGHT JOIN course c ON c.CourseCode = s.CourseCode )AS T WHERE T.UserID !='".$IuserID."' or T.UserID is NULL  ORDER by CourseName";
+                    $result2 = mysqli_query($conn,$sql);
+
+                     ?>
+                    <form>
+                    &nbsp;   &nbsp;   &nbsp;  Find course code: &nbsp; 
+                    <select name="users" onchange="showUser(this.value)">
+                      <?php while ($othercourses = mysqli_fetch_object($result2)){?>
+                      <option value="<?php echo $othercourses->CourseCode;?>"><?php echo $othercourses->CourseCode;?></option>
+
+                      <?php } ?>
+                    </select>
+                        </form>
+
+                      <br>
+                      <div class="panel-body" id="txtHint">
+
+                    <table class="table table-scroll table-striped">
+                      <thead>
+                        <tr>
+                          <th>Course Code</th>
+                          <th>Descriptive Title</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+
+                      <tbody style="width:80%; height:50%;">
+                        <?php while ($othercourses = mysqli_fetch_object($result1)){?>
+                        <tr>
+                          <td id="code"><?php echo $othercourses->CourseCode;?></td>
+                          <td id="desc"><?php echo $othercourses->CourseName;?></td>
+                          <td><a href="adminWLAPothercourses.php?id=<?php echo $othercourses->CourseOrder;?>">View list</a></td>
+                        </tr>
                              <?php } ?>
-											</tbody>
-										</table>
+                      </tbody>
+                    </table>
+                  </div>
 									</div>
 								</div>
 							</div>
@@ -246,6 +265,30 @@
 		<script src="js/sb-admin-2.js"></script>
 
 		<script src="js/customJS.js"></script>
+    <script>
+function showUser(str) {
+    if (str == "") {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else {
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET","getcourse.php?q="+str,true);
+        xmlhttp.send();
+    }
+}
+</script>
+
 
 	</body>
 

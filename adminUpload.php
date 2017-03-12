@@ -15,7 +15,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<title>Admin | WLAP and Syllabus Management System</title>
+		<title>WLAP and Syllabus Management System</title>
 
 		<!-- Styles -->
 		<style>
@@ -57,7 +57,7 @@
 				<div class="navbar-default sidebar" role="navigation">
 					<div class="sidebar-nav navbar-collapse text-center">
 						<ul class="nav" id="side-menu">
-							<li>
+              <li>
 								<a href="adminHome.php"><i class="fa fa-3x fa-home fa-fw"></i><br>Home</a>
 							</li>
 							<li>
@@ -67,7 +67,7 @@
 								<a href="adminSyllabus.php"><i class="fa fa-3x fa-file-text-o fa-fw"></i><br>Syllabus</a>
 							</li>
 							<li>
-								<a href="#"><i class="fa fa-3x fa-id-card-o fa-fw"></i><br>Faculty</a>
+								<a href="adminFacultyMgmt.php"><i class="fa fa-3x fa-id-card-o fa-fw"></i><br>Faculty</a>
 							</li>
 							<li>
 								<a href="adminlogout.php"><i class="fa fa-3x fa-sign-out fa-fw"></i><br>Logout</a>
@@ -83,93 +83,60 @@
 			<div id="page-wrapper">
 				<div class="row">
 					<div class="col-lg-12">
-						<h2 class="page-header">WLAP</h2>
+						<h2 class="page-header">Home</h1>
 					</div>
 					<!-- /.col-lg-12 -->
 				</div>
 
 				<div class="row">
-					<div class="col-lg-5">
-						<!-- Faculty List -->
+					<div class="col-lg-10">
 						<div class="panel panel-green">
 							<div class="panel-heading">
-								<i class="fa fa-search fa-fw"></i>&nbsp; Search Faculty
+								<i class="fa fa-calendar fa-fw"></i> Upload Profile Picture
 							</div>
 							<!-- /.panel-heading -->
 
-							<div class="panel-body" style="height:415px;">
-								<form class="navbar-form">
-									<div class="form-group">
+							<div class="panel-body">
+							<?php
 
-									  <a data-toggle="modal" data-target="#modal_addFaculty" style="margin-left:280px;"><b>+ Add Faculty</b></a>
-									</div>
-								</form>
-								<table class="table table-scroll table-striped">
-									<thead>
-										<tr>
-											<th>Faculty Name</th>
-											<th>Action</th>
-										</tr>
-									</thead>
-                  <?php
-                  require ("database.php");
-                  $sql="SELECT user.UserID,user.FirstName,user.LastName,LEFT(user.MiddleName,1) as 'MiddleName',user.TypeofUserNum FROM user WHERE user.TypeofUserNum !=2   ";
-                  $result1 = mysqli_query($conn,$sql);
-
-                  ?>
-									<tbody style="width:89%; height:60%;">
-<?php while ($faculty = mysqli_fetch_object($result1)){?>
-                    <tr>
-											<td id="name"><?php echo   $faculty->FirstName; ?> <?php echo  $faculty->MiddleName; ?>. <?php echo  $faculty->LastName; ?></td>
-											<td><a href="adminFacultyMgmtSchedule.php?userid=<?php echo $faculty->UserID;?>">View</a> | <a href="adminAddSchedule.php?userid=<?php echo $faculty->UserID;?>">Add</a></td>
-
-</td>
-										</tr>
-                      <?php } ?>
-									</tbody>
-								</table>
-
+							include 'upload_crop_admin.php';
+							?>
 							</div>
 							<!-- /.panel-body -->
 						</div>
 						<!-- /.panel -->
 					</div>
-					<!-- /.col-lg-4 -->
+
+
+
+
 				</div>
 				<!-- /.row -->
 
-				<!-- Popup add faculty -->
-				<div class="modal fade" id="modal_addFaculty" role="dialog">
+				<!-- Popup for viewing WLAP -->
+				<				<!-- /#Popup window -->
+
+				<!-- Popup for changing photo -->
+				<div class="modal fade" id="modal_changePhoto" role="dialog">
 					<div class="modal-dialog">
 					  <!-- Modal content-->
-					  <div class="modal-content" style="width:500px; height:520px;">
+					  <div class="modal-content">
 						<div class="modal-header">
 						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-						  <h4 class="modal-title">+ Add Faculty</h4>
+						  <h4 class="modal-title">Change Display Photo</h4>
 						</div>
-						<div class="modal-body">
-              <form action ="submitprof.php" method="post" class="form" role="form">
-							<div class="form-group col-lg-10">
-								<label for=lname>Last Name</label>
-								<input class="form-control" id="lname" type="text" name="LN" placeholder="Enter last name" required><br>
-								<label for=fname>First Name</label>
-								<input class="form-control" id="fname" type="text" name="FN" placeholder="Enter first name" required><br>
-								<label for=mname>Middle Name</label>
-								<input class="form-control" id="mname" type="text" name="MN" placeholder="Enter middle name"><br>
-								<label for=num>Contact Number</label>
-								<input class="form-control" id="num" type="text" name="cnumber" placeholder="Enter contact number" required><br>
-								<label for=email>Email Address</label>
-								<input class="form-control" id="email" type="email" name="email" placeholder="Enter email address" required>
-								<button type="Submit" name="submit" class="btn btn-sub"><b>Submit &nbsp;<i class="fa fa-arrow-right"></i></b></button>
-							</div>
-            </form>
-						</div>
+						<?php
+						include 'upload_crop_admin.php';
+						?>
+						<!--<div class="modal-body" style="height: 700px;">
+            <input type="file" name="fileToUpload" id="fileToUpload"><br>
+							<a id="submit"><i class="fa fa-check fa-fw"></i><b>Submit</b></a> &nbsp;&nbsp;
+							<a onclick="hidePhotoInput()" id="can"><i class="fa fa-close fa-fw"></i><b>Cancel</b></a>
+						</div> -->
 					  </div>
 					</div>
 				</div>
 				<!-- /#Popup window -->
-
-
 
 				<!-- Footer -->
 				<footer class="text-center">
@@ -185,7 +152,7 @@
 				</footer>
 
 			</div>
-			<!--/#page-wrapper -->
+			<!-- /#page-wrapper -->
 		</div>
 		<!-- /#wrapper -->
 
