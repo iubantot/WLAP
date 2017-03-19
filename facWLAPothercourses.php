@@ -382,7 +382,7 @@
                   <h4 class="modal-title"><?php echo $file->CourseCode; ?>- Upload File</h4>
               </div>
               <div class="modal-body" style="height: 350px;"><br>
-                <form action="UploadFileProcWLAP.php?id=<?php echo $file->FileName;?>.pdf&week=<?php echo $file->Week_num_for_WLAP; ?>" method="post" enctype="multipart/form-data">
+                <form action="UploadFileProcWLAP.php?id=<?php echo $file->FileName;?>&week=<?php echo $file->Week_num_for_WLAP; ?>" method="post" enctype="multipart/form-data">
                     <h3>Upload a revision of file</h3>
                     <div class="btnPos">
                   <label class="btn btn-sub">

@@ -6,7 +6,7 @@
   $get_coursecode =  $_POST['code'];
   $get_file_name = $get_coursecode."_Syllabus.pdf";
   if(isset($_POST['submitbtn'])){
-  $dir = "pdf/Syllabus";
+  $dir = "pdf/Syllabus/";
   $file_name = $get_file_name;
   $target_file = $dir . basename($_FILES["fileUpload"]["name"]);
   $file_type = pathinfo($target_file,PATHINFO_EXTENSION);

@@ -6,6 +6,7 @@
   $get_coursecode =  $_GET['coursecode'];
   if(isset($_POST['submitbtn'])){
   $dir = "pdf_pend/";
+  $type= ".pdf";
   $file_name = $get_file_name;
   $target_file = $dir . basename($_FILES["fileUpload"]["name"]);
   $file_type = pathinfo($target_file,PATHINFO_EXTENSION);
@@ -29,7 +30,7 @@
   else{
     $new_size = $file_size/1024; //to convert to kb
  require ("session.php");
-  if(move_uploaded_file($file_loc,$dir.$file_name)){
+  if(move_uploaded_file($file_loc,$dir.$file_name.$type)){
 
       $sql="INSERT INTO file(FileType,FileName,FileSize,FileClass,DateUpload,TimeUpload,Week_num_for_WLAP,Status,CourseCode,UserID) VALUES('pdf','$file_name','$new_size','$class','$date','$time1','$week','$stat','$get_coursecode','$IuserID')";
       $query = mysqli_query($conn,$sql);

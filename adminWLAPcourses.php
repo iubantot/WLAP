@@ -251,7 +251,7 @@
                       <li><a href="DownloadFileWLAP.php?down=<?php echo $weeks->FileName; ?>.pdf" id="down"><i class="fa fa-download fa-fw"></i>Download</a></li>
                       <li><a data-toggle="modal" data-target="#modal_upload<?php echo $weeks->FileName;?>" id="up"><i class="fa fa-upload fa-fw"></i>Upload Revision</a></li>
                       <li><a data-toggle="modal" data-target="#modal_remarks<?php echo $weeks->Week_num_for_WLAP;?>" id="rem"><i class="fa fa-pencil-square-o fa-fw"></i>Add Remarks</a></li>
-                      <li><a data-toggle="modal" data-target="#modal_remarks<?php echo $weeks->Week_num_for_WLAP;?>" id="rem"><i class="fa fa-icon-eye-open fa-fw"></i>View Remarks</a></li>
+                      <li><a data-toggle="modal" data-target="#modal_view<?php echo $weeks->Week_num_for_WLAP;?>" id="vrem"><i class="fa fa-eye fa-fw"></i>View Remarks</a></li>
                     </ul>
                   </span>
                  <?php } ?>
@@ -366,6 +366,49 @@
         </div>
         </div>
         <?php }?>
+        <?php
+        $courseorder=$_GET['id'];
+        require ("database.php");
+        $sql="Select file.FileName ,file.FileID, course.CourseOrder ,file.CourseCode, file.Week_num_for_WLAP,remarks.Remarks,remarks.Time_Added,remarks.Date_Added from file INNER JOIN course ON file.CourseCode=course.CourseCode LEFT JOIN remarks on file.FileID =remarks.FileID WHERE CourseOrder = '".$courseorder."' AND file.FileClass='WLAP' AND file.Status = 'Approved' AND remarks.UserID = '".$IuserID."'";
+        $result2 = mysqli_query($conn,$sql);
+         ?>
+      <!-- Popup view of WLAP -->
+      <?php
+      while ($course = mysqli_fetch_object($result2)){?>
+      <div class="modal fade" id="modal_view<?php echo $course->Week_num_for_WLAP;?>" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title"><?php echo $course->CourseCode; ?>- Week <?php echo $course->Week_num_for_WLAP;?> Remarks</h4>
+          </div>
+            <form  class="form" role="form">
+          <div class="modal-body" style="height: 350px;"><br>
+            <div class="form-group">
+              Remarks : <br> <br>
+              <?php echo $course->Remarks;?>
+
+            </div>
+<br> <br>
+
+            <?php
+          date_default_timezone_set('asia/manila');
+          $date=date('d-m-Y');
+          $time = date("h:i");
+          ?>
+            <span class="pull-left text-muted small" style="display:block;">
+                Added last <?php echo $course->Time_Added;?>  | <?php echo $course->Date_Added;?>
+            </span>
+          </div>
+        </form>
+
+          <!-- /#modal-body -->
+          </div>
+          <!-- /#modal-content -->
+        </div>
+      </div>
+          <?php }?>
 				<!-- /#Popup window -->
 
         <!-- Footer -->
@@ -400,7 +443,7 @@
                   <h4 class="modal-title"><?php echo $file->CourseCode; ?>- Upload File</h4>
               </div>
               <div class="modal-body" style="height: 350px;"><br>
-                  <form action="UploadFileProcWLAP.php?id=<?php echo $file->FileName;?>.pdf&week=<?php echo $file->Week_num_for_WLAP;?>&coursecode=<?php echo $file->CourseCode;?> " method="post" enctype="multipart/form-data">
+                  <form action="UploadFileProcWLAP.php?id=<?php echo $file->FileName;?>&week=<?php echo $file->Week_num_for_WLAP;?>&coursecode=<?php echo $file->CourseCode;?> " method="post" enctype="multipart/form-data">
                     <h3>Upload a revision of file</h3>
                     <div class="btnPos">
                   <label class="btn btn-sub">

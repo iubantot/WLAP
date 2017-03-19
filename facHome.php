@@ -108,7 +108,7 @@
 
               <div>
                 <form>
-                &nbsp;   &nbsp;   &nbsp;  Find course code: &nbsp;
+                &nbsp;   &nbsp;   &nbsp;  Your schedule on : &nbsp;
                 <select name="users" onchange="showUser(this.value)">
 
                   <option value="Monday">Monday</option>

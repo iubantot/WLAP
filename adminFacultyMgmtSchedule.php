@@ -83,7 +83,7 @@
 			<div id="page-wrapper">
 				<div class="row">
 					<div class="col-lg-12">
-						<h2 class="page-header">WLAP</h2>
+						<h2 class="page-header">Faculty Management</h2>
 					</div>
 					<!-- /.col-lg-12 -->
 				</div>
@@ -100,8 +100,8 @@
 							<div class="panel-body" style="height:415px;">
 								<form class="navbar-form">
 									<div class="form-group">
-									  <input type="text" placeholder="Search for..." class="form-control">
-									  <a data-toggle="modal" data-target="#modal_addFaculty" style="margin-left:100px;"><b>+ Add Faculty</b></a>
+
+									  <a data-toggle="modal" data-target="#modal_addFaculty" style="margin-left:280px;"><b>+ Add Faculty</b></a>
 									</div>
 								</form>
 								<table class="table table-scroll table-striped">
@@ -175,7 +175,7 @@
                     <?php while ($schedule = mysqli_fetch_object($result4)){?>
 											<tr>
                         <td id="code"><?php echo $schedule->CourseCode;?></td>
-									
+
 
 												<td id="desc"><?php echo $schedule->CourseName;?></td>
 												<td id="sec"><?php echo $schedule->Section;?></td>

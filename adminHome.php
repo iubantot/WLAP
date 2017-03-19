@@ -24,6 +24,16 @@
 				background:none !important;
 				background-color: #fff !important;
 			}
+      .container-pdf * > .modal-body{
+				width:100%;
+				height: calc(100vh - 125px);
+
+			}
+			.pdfobject-container{
+				width:100%;
+				height: calc(100vh - 155px);
+			}
+
 		</style>
 
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -98,7 +108,7 @@
 
 							<div class="panel-body">
 
-								
+
                 <?php
 
                 $t=date('d-m-Y');
@@ -190,7 +200,7 @@
 							<div class="panel-body" style="overflow-y:auto; height:176px;">
                 <?php
 							require ("database.php");
-							$sql="SELECT file.FileID,file.CourseCode,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE file.Status = 'Pending' ORDER BY file.DateUpload ASC  ";
+							$sql="SELECT file.FileID,file.CourseCode,file.DateUpload, file.TimeUpload, user.Username,file.UserID FROM file INNER JOIN user on user.UserID = file.UserID  WHERE file.Status = 'Pending' ORDER BY file.DateUpload ASC  ";
 							$result1 = mysqli_query($conn,$sql);
 
 							 ?>
@@ -198,14 +208,14 @@
 								<div class="list-group" style="height:165px;">
                   	<?php while ($notification = mysqli_fetch_object($result1)){?>
 									<span href="#" class="list-group-item" style="height:100px;">
-										<a data-toggle="modal" data-target="#modal_viewWLAP" id="coursecode">
+										<a data-toggle="modal" data-target="#modal_viewWLAP<?php echo $notification->FileID;?>" id="coursecode">
                     <span hidden class="pull-left text-muted small" style="display:hidden;" ><em id="faculty" name="FileID" ><?php echo $notification->FileID;?></em></span>
 										<i class="fa fa-file-text-o fa-fw" ></i>&nbsp;<?php echo $notification->CourseCode;?></a><br>
 										<span class="pull-left text-muted small">Revised by: <em id="faculty"><?php echo $notification->Username;?></em></span>
 										<span class="pull-right text-muted small" id="datetime"><?php echo $notification->DateUpload;?> | <?php echo $notification->TimeUpload;?></span>
 										<div class="row text-center">
-											<button type="submit" class="btn btn-sub" style="width:40%;" name="Approve"><i class="fa fa-check"></i><a href="approve.php?id=<?php echo $notification->FileID;?>"> Approve</a></button>
-											<button  type="submit" class="btn btn-sub" style="width:40%;" name="Reject"><i class="fa fa-times"></i><a href="reject.php?id=<?php echo $notification->FileID;?>"> Reject</a></button>
+											<button type="submit" class="btn btn-sub" style="width:40%;" name="Approve"><i class="fa fa-check"></i><a href="approve.php?id=<?php echo $notification->FileID;?>&userid=<?php echo $notification->UserID;?>"> Approve</a></button>
+											<button  type="submit" class="btn btn-sub" style="width:40%;" name="Reject"><i class="fa fa-times"></i><a href="reject.php?id=<?php echo $notification->FileID;?>&userid=<?php echo $notification->UserID;?>"> Reject</a></button>
 										</div>
 									</span>
                     <?php } ?>
@@ -219,23 +229,35 @@
 					</div>
 				</div>
 				<!-- /.row -->
+        <?php
+        require ("database.php");
+        $sql="SELECT file.FileID,file.CourseCode,file.DateUpload,file.Week_num_for_WLAP, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE file.Status = 'Pending' ORDER BY file.DateUpload ASC  ";
+        $result24 = mysqli_query($conn,$sql);
 
+        ?>
+
+
+
+        <div class="container-pdf">
+        <?php while ($notification1 = mysqli_fetch_object($result24)){?>
 				<!-- Popup for viewing WLAP -->
-				<div class="modal fade" id="modal_viewWLAP" role="dialog">
-					<div class="modal-dialog">
+				<div class="modal fade" id="modal_viewWLAP<?php echo $notification1->FileID;?>" role="dialog">
+					<div class="modal-dialog modal-lg">
 					  <!-- Modal content-->
 					  <div class="modal-content">
 						<div class="modal-header">
 						  <button type="button" class="close" data-dismiss="modal">&times;</button>
-						  <h4 class="modal-title" id="coursecode">COE 002A</h4>
-						  Revised by:&nbsp;<em id="faculty" style="color:#d9d9d9;">arvillanueva</em>
+						  <h4 class="modal-title" id="coursecode"><?php echo $notification1->CourseCode;?>-WEEK <?php echo $notification1->Week_num_for_WLAP;?></h4>
+						  Revised by:&nbsp;<em id="faculty" style="color:#d9d9d9;"><?php echo $notification1->Username;?></em>
 						</div>
 						<div class="modal-body">
-							...
+							<div id="pdf-container<?php echo $notification1->FileID;?>"></div>
 						</div>
 					  </div>
 					</div>
 				</div>
+          <?php } ?>
+        </div>
 				<!-- /#Popup window -->
 
 				<!-- Popup for changing photo -->
@@ -332,7 +354,21 @@
 		<!-- Custom Theme JavaScript -->
 		<script src="js/sb-admin-2.js"></script>
 
+    <script src="js/pdfobject.min.js"></script>
+
 		<script src="js/customJS.js"></script>
+    <?php
+
+              require ("database.php");
+              $sql="SELECT file.FileID,file.CourseCode,file.FileName,file.DateUpload, file.TimeUpload, user.Username FROM file INNER JOIN user on user.UserID = file.UserID  WHERE file.Status = 'Pending' ORDER BY file.DateUpload ASC  ";
+              $result3 = mysqli_query($conn,$sql);
+        ?>
+
+    <script>
+    <?php while ($pdf = mysqli_fetch_object($result3)){?>
+            PDFObject.embed(<?php echo "\"pdf_pend/"; echo $pdf->FileName ; echo ".pdf\"";?>, "#pdf-container<?php echo $pdf->FileID;?>");
+    <?php }?>
+    </script>
 
 	</body>
 

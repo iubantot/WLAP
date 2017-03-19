@@ -83,7 +83,7 @@
 			<div id="page-wrapper">
 				<div class="row">
 					<div class="col-lg-12">
-						<h2 class="page-header">WLAP</h1>
+						<h2 class="page-header">Faculty Management </h1>
 					</div>
 					<!-- /.col-lg-12 -->
 				</div>
@@ -100,16 +100,16 @@
 							<div class="panel-body" style="height:415px;">
 								<form class="navbar-form">
 									<div class="form-group">
-									  <input type="text" placeholder="Search for..." class="form-control">
-									  <a data-toggle="modal" data-target="#modal_addFaculty" style="margin-left:100px;"><b>+ Add Faculty</b></a>
+
+									  <a data-toggle="modal" data-target="#modal_addFaculty" style="margin-left:280px;"><b>+ Add Faculty</b></a>
 									</div>
 								</form>
 								<table class="table table-scroll table-striped">
 									<thead>
 										<tr>
-											<th>Faculty ID</th>
+
 											<th>Faculty Name</th>
-											<th>Schedule</th>
+											<th>Action</th>
 										</tr>
 									</thead>
                   <?php
